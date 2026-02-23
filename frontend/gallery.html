@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Event Management</title>
+    <link rel="stylesheet" href="css/style.css?v=31.0">
+    <link rel="stylesheet" href="css/navbar.css?v=31.0">
+    <link rel="stylesheet" href="css/home-gallery-filters.css?v=31.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo"><img src="images/logo.jpeg" alt="Event Master" class="logo-img"> <span
+                    class="logo-text">Event's By Patel</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="services.html">Services</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-auth">
+                <a href="login.html" class="btn">Login</a>
+                <a href="register.html" class="btn btn-secondary">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="section"
+        style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1467810563316-b5476525c0f9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat; color: #fff; padding: 120px 0; text-align: center;">
+        <div class="container">
+            <h1 style="font-size: 3.5rem; margin-bottom: 20px;">Our Event Gallery</h1>
+            <p style="font-size: 1.2rem; opacity: 0.9;">Capturing moments, creating memories. Explore our finest work.
+            </p>
+        </div>
+    </header>
+
+    <div class="container section">
+        <div class="gallery-filtered-section">
+            <div class="gallery-filters">
+                <button class="gallery-filter-btn active" data-filter="all">All Events</button>
+                <button class="gallery-filter-btn" data-filter="wedding">Weddings</button>
+                <button class="gallery-filter-btn" data-filter="corporate">Corporate</button>
+                <button class="gallery-filter-btn" data-filter="birthday">Birthdays</button>
+                <button class="gallery-filter-btn" data-filter="baby-shower">Baby Shower</button>
+                <button class="gallery-filter-btn" data-filter="anniversary">Anniversaries</button>
+                <button class="gallery-filter-btn" data-filter="home-decor">Home Decor & Welcome</button>
+            </div>
+            <div class="gallery-filter-grid">
+                <!-- Images will be injected here by JS -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Event's By Patel</h3>
+                <p>We Create, You Celebrate.</p>
+                <div style="margin-top: 20px;">
+                    <h4>Created By</h4>
+                    <p><i class="fas fa-user-circle"></i> Mahi Patel</p>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Contact Us</h4>
+                <p><i class="fas fa-map-marker-alt"></i> Arise flours Gota</p>
+                <p><i class="fas fa-phone-alt"></i> <a href="tel:+916351985104">+91 6351985104</a></p>
+                <p><i class="fas fa-envelope"></i> <a
+                        href="mailto:eventsbypatel88@gmail.com">eventsbypatel88@gmail.com</a></p>
+            </div>
+
+            <div class="footer-column">
+                <h4>Follow Us</h4>
+                <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/Event’s.by_patel"
+                        target="_blank">Event’s.by_patel</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Event's By Patel. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api.js?v=31.0"></script>
+    <script src="js/auth.js?v=31.0"></script>
+    <script src="js/gallery-filters.js?v=31.0"></script>
+</body>
+
+</html>

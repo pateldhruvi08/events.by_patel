@@ -1,0 +1,121 @@
+/* Home Contact Section */
+.contact-home-section {
+    padding: 80px 0;
+    background-color: #f8f9fa;
+    /* Light background */
+}
+
+.contact-home-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Contact Info Side */
+.contact-home-info {
+    padding: 20px;
+}
+
+.contact-home-info h3 {
+    font-size: 1.8rem;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+
+.contact-home-info p {
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.contact-detail {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.contact-detail i {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.contact-detail span {
+    color: var(--text-color);
+}
+
+/* Form Side */
+.contact-home-form-container {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.contact-home-form .form-group {
+    margin-bottom: 20px;
+}
+
+.contact-home-form input,
+.contact-home-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.contact-home-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.contact-home-form input:focus,
+.contact-home-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(212, 175, 55, 0.2);
+}
+
+.contact-home-form button {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contact-home-wrapper {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .contact-home-info {
+        text-align: center;
+        padding: 0;
+    }
+
+    .contact-detail {
+        justify-content: center;
+        /* Center align info on mobile */
+        text-align: left;
+        /* Keep text left aligned relative to icon if possible, but centered flex works well */
+    }
+
+    .contact-home-form-container {
+        padding: 25px;
+    }
+}

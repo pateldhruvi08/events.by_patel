@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Event Management</title>
+    <link rel="stylesheet" href="css/style.css?v=31.0">
+    <link rel="stylesheet" href="css/navbar.css?v=31.0">
+    <link rel="stylesheet" href="css/dashboard.css?v=31.0">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo"><img src="images/logo.jpeg" alt="Event Master" class="logo-img"> <span
+                    class="logo-text">Event's By Patel</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="services.html">Services</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-auth">
+                <!-- Dynamically filled -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="avatar-circle">A</div>
+                <h3>Admin Panel</h3>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#" class="active" onclick="switchTab('services')"><i class="fas fa-concierge-bell"></i>
+                        Services</a></li>
+                <li><a href="#" onclick="switchTab('gallery')"><i class="fas fa-images"></i> Gallery</a></li>
+                <li><a href="#" onclick="switchTab('bookings')"><i class="fas fa-calendar-alt"></i> Bookings</a></li>
+                <li><a href="#" onclick="switchTab('users')"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Services Tab -->
+            <div id="services-tab" class="tab-content active">
+                <div class="tab-header"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Manage Services</h2>
+                    <button class="btn" onclick="openServiceModal()">+ Add Service</button>
+                </div>
+                <div id="admin-services-list" class="grid-container"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+                    <p>Loading services...</p>
+                </div>
+            </div>
+
+            <!-- Gallery Tab -->
+            <div id="gallery-tab" class="tab-content" style="display: none;">
+                <div class="tab-header"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Manage Gallery</h2>
+                    <button class="btn" onclick="openGalleryModal()">+ Add Image</button>
+                </div>
+                <div id="admin-gallery-grid" class="grid-container"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                    <p>Loading images...</p>
+                </div>
+            </div>
+
+            <!-- Bookings Tab -->
+            <div id="bookings-tab" class="tab-content" style="display: none;">
+                <h2>All Bookings</h2>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table" style="width: 100%; border-collapse: collapse; background: white;">
+                        <thead>
+                            <tr style="background: var(--secondary-color); color: white;">
+                                <th style="padding: 10px;">ID</th>
+                                <th style="padding: 10px;">User</th>
+                                <th style="padding: 10px;">Event</th>
+                                <th style="padding: 10px;">Date</th>
+                                <th style="padding: 10px;">Time</th>
+                                <th style="padding: 10px;">Location</th>
+                                <th style="padding: 10px;">Package</th>
+                                <th style="padding: 10px;">Status / Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-bookings-table">
+                            <tr>
+                                <td colspan="9" style="padding: 20px; text-align: center;">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="users-tab" class="tab-content" style="display: none;">
+                <h2>Manage Users</h2>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table" style="width: 100%; border-collapse: collapse; background: white;">
+                        <thead>
+                            <tr style="background: var(--secondary-color); color: white;">
+                                <th style="padding: 10px;">ID</th>
+                                <th style="padding: 10px;">Username</th>
+                                <th style="padding: 10px;">Email</th>
+                                <th style="padding: 10px;">Phone</th>
+                                <th style="padding: 10px;">Role</th>
+                                <th style="padding: 10px;">Status</th>
+                                <th style="padding: 10px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-users-table">
+                            <tr>
+                                <td colspan="7" style="padding: 20px; text-align: center;">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="service-modal" class="modal"
+        style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;">
+        <div class="modal-content"
+            style="background: #fff; margin: 5% auto; padding: 30px; width: 90%; max-width: 500px; border-radius: 8px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <span class="close" onclick="closeServiceModal()"
+                style="position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer;">&times;</span>
+            <h2 id="service-modal-title">Add/Edit Service</h2>
+            <form id="service-form">
+                <input type="hidden" id="service-id">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px;">Service Name</label>
+                    <input type="text" id="service-name" required style="width: 100%; padding: 8px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px;">Category</label>
+                    <input type="text" id="service-category" required style="width: 100%; padding: 8px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px; display: none;">
+                    <label style="display:block; margin-bottom: 5px;">Price</label>
+                    <input type="number" id="service-price" value="0" style="width: 100%; padding: 8px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px;">Description</label>
+                    <textarea id="service-desc" rows="3" style="width: 100%; padding: 8px;"></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px;">Service Image Path</label>
+                    <input type="text" id="service-image-url" placeholder="e.g. images/wedding/img1.jpeg" required
+                        style="width: 100%; padding: 8px;">
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Must be a relative path located in the
+                        <strong>images/</strong> folder.
+                    </p>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Save Service</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Gallery Modal -->
+    <div id="gallery-modal" class="modal"
+        style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000;">
+        <div class="modal-content"
+            style="background: #fff; margin: 10% auto; padding: 30px; width: 90%; max-width: 400px; border-radius: 8px; position: relative;">
+            <span class="close" onclick="closeGalleryModal()"
+                style="position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer;">&times;</span>
+            <h2>Add Image</h2>
+            <form id="gallery-form">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px;">Title (Optional)</label>
+                    <input type="text" id="gallery-title" style="width: 100%; padding: 8px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display:block; margin-bottom: 5px;">Image Path</label>
+                    <input type="text" id="gallery-image-url" placeholder="e.g. images/wedding/img1.jpeg" required
+                        style="width: 100%; padding: 8px;">
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Must be a relative path located in the
+                        <strong>images/</strong> folder.</p>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Upload</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Event's By Patel</h3>
+                <p>We Create, You Celebrate.</p>
+                <div style="margin-top: 20px;">
+                    <h4>Managed By</h4>
+                    <p><i class="fas fa-user-circle"></i> Mahi Patel</p>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Contact Us</h4>
+                <p><i class="fas fa-map-marker-alt"></i> Arise flours Gota</p>
+                <p><i class="fas fa-phone-alt"></i> <a href="tel:+916351985104">+91 6351985104</a></p>
+                <p><i class="fas fa-envelope"></i> <a
+                        href="mailto:eventsbypatel88@gmail.com">eventsbypatel88@gmail.com</a></p>
+            </div>
+
+            <div class="footer-column">
+                <h4>Follow Us</h4>
+                <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/Event’s.by_patel"
+                        target="_blank">Event’s.by_patel</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Event's By Patel. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api.js?v=31.0"></script>
+    <script src="js/auth.js?v=31.0"></script>
+    <script src="js/admin.js?v=31.0"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+/* Home Services Section */
+.services-home-section {
+    padding: 60px 0;
+    background-color: var(--light-bg);
+}
+
+.services-home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 columns desktop */
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.service-home-card {
+    background: var(--white);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.service-home-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.service-home-img-container {
+    width: 100%;
+    height: 220px;
+    /* Fixed height for consistency */
+    overflow: hidden;
+    position: relative;
+    background-color: #f0f0f0;
+    /* Placeholder color */
+}
+
+.service-home-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Ensures image covers area without distortion */
+    object-position: center;
+    transition: transform 0.5s ease;
+    display: block;
+    /* Removes bottom space */
+}
+
+.service-home-card:hover .service-home-img {
+    transform: scale(1.1);
+}
+
+.service-home-content {
+    padding: 25px;
+    text-align: center;
+}
+
+.service-home-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-color);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: -55px auto 15px;
+    /* Overlap image */
+    position: relative;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.service-home-content h3 {
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+    font-size: 1.3rem;
+}
+
+.service-home-content p {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .services-home-grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 columns tablet */
+    }
+}
+
+@media (max-width: 600px) {
+    .services-home-grid {
+        grid-template-columns: 1fr;
+        /* 1 column mobile */
+    }
+}

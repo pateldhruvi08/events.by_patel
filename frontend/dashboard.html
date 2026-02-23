@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Event Management</title>
+    <link rel="stylesheet" href="css/style.css?v=31.0">
+    <link rel="stylesheet" href="css/navbar.css?v=31.0">
+    <link rel="stylesheet" href="css/dashboard.css?v=31.0">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo"><img src="images/logo.jpeg" alt="Event Master" class="logo-img"> <span
+                    class="logo-text">Event's By Patel</span></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="services.html">Services</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="nav-auth">
+                <!-- Dynamically filled -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="avatar-circle">U</div>
+                <h3 id="user-name-display">Loading...</h3>
+                <p id="user-email-display">...</p>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#" class="active" onclick="switchTab('bookings')"><i class="fas fa-calendar-check"></i> My
+                        Bookings</a></li>
+                <li><a href="#" onclick="switchTab('likes')"><i class="fas fa-heart"></i> Liked Images</a></li>
+                <li><a href="#" onclick="switchTab('settings')"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div id="tab-bookings" style="display: block;">
+                <h2>My Bookings</h2>
+                <div id="bookings-list" class="bookings-grid">
+                    <p>Loading your bookings...</p>
+                </div>
+            </div>
+
+            <div id="tab-likes" style="display: none;">
+                <h2>Liked Images</h2>
+                <div id="likes-grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <p>Loading your liked images...</p>
+                </div>
+            </div>
+
+            <div id="tab-settings" style="display: none;">
+                <h2>Account Settings</h2>
+                <div
+                    style="background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #ddd; max-width: 600px; margin-top: 20px;">
+                    <form id="settings-form">
+                        <h3 style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Edit
+                            Profile</h3>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="display:block; margin-bottom: 5px; font-weight:bold;">Full Name /
+                                Username</label>
+                            <input type="text" id="setting-username" placeholder="Username"
+                                style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="display:block; margin-bottom: 5px; font-weight:bold;">Email Address</label>
+                            <input type="email" id="setting-email" placeholder="email"
+                                style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="display:block; margin-bottom: 5px; font-weight:bold;">Phone Number</label>
+                            <input type="text" id="setting-phone" placeholder="e.g. +91"
+                                style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
+                        </div>
+
+                        <h3
+                            style="margin-top:30px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                            Security</h3>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="display:block; margin-bottom: 5px; font-weight:bold;">New Password (leave
+                                blank to keep current)</label>
+                            <input type="password" id="setting-password" placeholder="New Password"
+                                style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
+                        </div>
+
+                        <h3
+                            style="margin-top:30px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                            Notification & Booking Preferences</h3>
+                        <div class="form-group" style="margin-bottom: 10px; display:flex; align-items:center;">
+                            <input type="checkbox" id="setting-notif-email"
+                                style="margin-right: 10px; transform: scale(1.2);">
+                            <label for="setting-notif-email" style="cursor:pointer;">Receive Booking Updates via
+                                Email</label>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 25px; display:flex; align-items:center;">
+                            <input type="checkbox" id="setting-notif-sms"
+                                style="margin-right: 10px; transform: scale(1.2);">
+                            <label for="setting-notif-sms" style="cursor:pointer;">Receive SMS Alerts</label>
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%; padding: 12px; font-size: 1.1em;">Save
+                            Settings</button>
+                    </form>
+
+                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ffcccc;">
+                        <h3 style="color: #dc3545; margin-bottom: 10px;">Danger Zone</h3>
+                        <p style="color: #666; font-size: 0.9em; margin-bottom: 15px;">Once you delete your account,
+                            there is no going back. Please be certain.</p>
+                        <button onclick="deleteAccount()"
+                            style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Delete
+                            Account</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Event's By Patel</h3>
+                <p>We Create, You Celebrate.</p>
+                <div style="margin-top: 20px;">
+                    <h4>Managed By</h4>
+                    <p><i class="fas fa-user-circle"></i> Mahi Patel</p>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Contact Us</h4>
+                <p><i class="fas fa-map-marker-alt"></i> Arise flours Gota</p>
+                <p><i class="fas fa-phone-alt"></i> <a href="tel:+916351985104">+91 6351985104</a></p>
+                <p><i class="fas fa-envelope"></i> <a
+                        href="mailto:eventsbypatel88@gmail.com">eventsbypatel88@gmail.com</a></p>
+            </div>
+
+            <div class="footer-column">
+                <h4>Follow Us</h4>
+                <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/Event’s.by_patel"
+                        target="_blank">Event’s.by_patel</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Event's By Patel. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/api.js?v=31.0"></script>
+    <script src="js/auth.js?v=31.0"></script>
+    <script src="js/dashboard.js?v=31.0"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</body>
+
+</html>
