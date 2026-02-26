@@ -144,3 +144,59 @@
     background-color: var(--light-bg);
     color: var(--primary-color);
 }
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .navbar .container {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 15px;
+    }
+
+    .logo-img {
+        height: 40px;
+    }
+
+    .logo-text {
+        font-size: 1.1rem;
+        margin-left: 5px;
+        white-space: nowrap;
+    }
+
+    .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 15px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .nav-links a {
+        font-size: 1rem;
+    }
+
+    .nav-auth {
+        order: 2;
+        display: flex;
+        align-items: center;
+    }
+
+    .profile-icon {
+        height: 35px;
+        font-size: 0.9rem;
+        padding: 5px 12px;
+        margin-left: 10px;
+    }
+
+    .nav-auth .btn {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+        margin-left: 5px;
+    }
+
+    .dropdown-content {
+        top: 45px;
+        min-width: 150px;
+    }
+}

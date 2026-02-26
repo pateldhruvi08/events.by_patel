@@ -112,3 +112,47 @@
     background-color: #f8d7da;
     color: #721c24;
 }
+
+/* Responsive Dashboard Layout */
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .user-profile {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+    }
+
+    .sidebar-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .sidebar-nav li {
+        margin-bottom: 0;
+    }
+
+    .sidebar-nav a {
+        padding: 10px 15px;
+        font-size: 0.95rem;
+    }
+
+    .main-content {
+        padding: 20px;
+        width: 100%;
+    }
+
+    .bookings-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,6 +1,6 @@
 // Update this to your deployed Render/Railway backend URL
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_URL = isLocalhost ? 'http://localhost:8000' : 'https://YOUR_BACKEND_URL_HERE.onrender.com';
+const API_URL = isLocalhost ? 'http://localhost:8000' : 'https://events-by-patel.onrender.com';
 
 class Api {
     static async get(endpoint, requireAuth = false) {

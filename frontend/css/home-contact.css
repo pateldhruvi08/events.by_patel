@@ -109,10 +109,9 @@
     }
 
     .contact-detail {
-        justify-content: center;
-        /* Center align info on mobile */
+        max-width: fit-content;
+        margin: 0 auto 20px auto;
         text-align: left;
-        /* Keep text left aligned relative to icon if possible, but centered flex works well */
     }
 
     .contact-home-form-container {
