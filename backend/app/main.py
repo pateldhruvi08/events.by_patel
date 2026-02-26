@@ -19,16 +19,9 @@ os.makedirs(STATIC_DIR, exist_ok=True) # Ensure it exists
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
-# CORS
-origins = [
-    "http://localhost",
-    "http://localhost:5500", # Live Server
-    "http://127.0.0.1:5500",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"], # Allow all origins for production (Netlify)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

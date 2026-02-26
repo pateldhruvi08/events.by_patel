@@ -15,7 +15,8 @@ async function updateNav() {
                     const user = await Api.get('/users/me', true);
                     isAdmin = user.is_superuser;
                 } else {
-                    const API_URL = 'http://localhost:8000';
+                    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                    const API_URL = isLocalhost ? 'http://localhost:8000' : 'https://YOUR_BACKEND_URL_HERE.onrender.com';
                     const userResponse = await fetch(`${API_URL}/users/me`, {
                         headers: { 'Authorization': `Bearer ${token}` }
                     });

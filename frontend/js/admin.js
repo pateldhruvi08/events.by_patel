@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:8000';
+// API_URL is provided globally by api.js
 
 document.addEventListener('DOMContentLoaded', () => {
     checkAdmin();
@@ -235,7 +235,7 @@ async function uploadImage(file) {
     formData.append('file', file);
 
     const token = localStorage.getItem('token');
-    const res = await fetch(`${API_BASE}/admin/upload`, {
+    const res = await fetch(`${API_URL}/admin/upload`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`
@@ -258,7 +258,7 @@ async function secureFetch(endpoint, method = 'GET', body = null) {
         headers['Content-Type'] = 'application/json';
     }
 
-    const res = await fetch(`${API_BASE}${endpoint}`, {
+    const res = await fetch(`${API_URL}${endpoint}`, {
         method,
         headers,
         body

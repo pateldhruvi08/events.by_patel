@@ -3,7 +3,7 @@ import os
 import glob
 
 html_files = glob.glob(r'c:\Users\Admin\Desktop\event manegement\frontend\*.html')
-v = "?v=31.0"
+v = "?v=34.0"
 
 for fn in html_files:
     with open(fn, 'r', encoding='utf-8') as f:
