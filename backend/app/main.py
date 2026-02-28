@@ -63,6 +63,30 @@ def populate_default_services():
             ]
             db.add_all(default_services)
             db.commit()
+            
+        # Ensure Admin user "mahi patel" exists
+        admin_user = db.query(models.User).filter(
+            (models.User.email == "mahipatel2628@gmail.com") | (models.User.username == "mahi patel")
+        ).first()
+
+        from .utils import get_password_hash
+        if not admin_user:
+            print("Admin user 'mahi patel' not found. Creating securely...")
+            new_admin = models.User(
+                username="mahi patel",
+                email="mahipatel2628@gmail.com",
+                hashed_password=get_password_hash("pw-12345"),
+                is_superuser=True,
+                is_active=True
+            )
+            db.add(new_admin)
+            db.commit()
+            print("Admin user created successfully.")
+        else:
+            if not admin_user.is_superuser:
+                admin_user.is_superuser = True
+                db.commit()
+                print("Updated existing user 'mahi patel' to have admin privileges.")
 
     except Exception as e:
         print(f"Auto-populate error: {e}")
