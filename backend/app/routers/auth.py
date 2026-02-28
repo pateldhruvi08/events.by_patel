@@ -23,15 +23,24 @@ def register(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
         raise HTTPException(status_code=400, detail="Username already taken")
     
     hashed_password = utils.get_password_hash(user.password)
-    new_user = models.User(
-        email=user.email,
-        username=user.username,
-        hashed_password=hashed_password
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
+    
+    try:
+        new_user = models.User(
+            email=user.email,
+            username=user.username,
+            hashed_password=hashed_password,
+            notification_email=True,
+            notification_sms=False,
+            is_active=True,
+            is_superuser=False
+        )
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        return new_user
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/login", response_model=schemas.Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(database.get_db)):
