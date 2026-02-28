@@ -1,12 +1,15 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import auth, users, services, bookings, admin, gallery, contact, likes
+from . import models
 from .database import engine, Base
+from .routers import auth, users, services, bookings, admin, gallery, contact, likes
 import os
 
-# Create tables
-Base.metadata.create_all(bind=engine)
+# 1. Safely create any missing tables using SQLAlchemy models.
+# 2. WILL NOT drop existing tables or delete existing data (CREATE TABLE IF NOT EXISTS).
+# 3. Requires that 'models' is explicitly imported before this runs!
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Event Management API")
 
