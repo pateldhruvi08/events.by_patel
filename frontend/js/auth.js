@@ -114,7 +114,7 @@ if (loginForm) {
                     console.error("Failed to fetch user role", e);
                 }
 
-                window.location.href = 'dashboard.html';
+                window.location.href = 'index.html';
             } else {
                 const data = await response.json();
                 let message = 'Login failed';
