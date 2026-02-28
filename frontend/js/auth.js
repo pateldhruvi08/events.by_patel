@@ -8,25 +8,33 @@ async function updateNav() {
 
     if (navAuth) {
         if (token) {
+            const role = localStorage.getItem('role');
             let isAdmin = false;
-            try {
-                // If api.js is loaded
-                if (typeof Api !== 'undefined') {
-                    const user = await Api.get('/users/me', true);
-                    isAdmin = user.is_superuser;
-                } else {
-                    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                    const API_URL = isLocalhost ? 'http://localhost:8000' : 'https://events-by-patel.onrender.com';
-                    const userResponse = await fetch(`${API_URL}/users/me`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    if (userResponse.ok) {
-                        const userData = await userResponse.json();
-                        isAdmin = userData.is_superuser;
+
+            if (role) {
+                isAdmin = (role === 'admin');
+            } else {
+                try {
+                    // Fallback if role missing in localStorage for existing users
+                    if (typeof Api !== 'undefined') {
+                        const user = await Api.get('/users/me', true);
+                        isAdmin = user.is_superuser;
+                        localStorage.setItem('role', isAdmin ? 'admin' : 'customer');
+                    } else {
+                        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                        const API_URL = isLocalhost ? 'http://localhost:8000' : 'https://events-by-patel.onrender.com';
+                        const userResponse = await fetch(`${API_URL}/users/me`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (userResponse.ok) {
+                            const userData = await userResponse.json();
+                            isAdmin = userData.is_superuser;
+                            localStorage.setItem('role', isAdmin ? 'admin' : 'customer');
+                        }
                     }
+                } catch (e) {
+                    console.error(e);
                 }
-            } catch (e) {
-                console.error(e);
             }
 
             navAuth.innerHTML = `
