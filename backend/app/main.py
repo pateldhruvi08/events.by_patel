@@ -63,6 +63,7 @@ def populate_default_services():
             ]
             db.add_all(default_services)
             db.commit()
+
     except Exception as e:
         print(f"Auto-populate error: {e}")
     finally:
