@@ -57,4 +57,5 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     access_token = utils.create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    role = "admin" if user.is_superuser else "customer"
+    return {"access_token": access_token, "token_type": "bearer", "role": role}

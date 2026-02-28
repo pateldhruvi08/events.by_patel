@@ -51,6 +51,7 @@ async function updateNav() {
 
 function logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
     window.location.href = 'index.html';
 }
 
@@ -97,24 +98,13 @@ if (loginForm) {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('token', data.access_token);
+                localStorage.setItem('role', data.role);
 
-                // Check if user is admin
-                try {
-                    const userResponse = await fetch(`${API_URL}/users/me`, {
-                        headers: { 'Authorization': `Bearer ${data.access_token}` }
-                    });
-                    if (userResponse.ok) {
-                        const userData = await userResponse.json();
-                        if (userData.is_superuser) {
-                            window.location.href = 'admin.html';
-                            return;
-                        }
-                    }
-                } catch (e) {
-                    console.error("Failed to fetch user role", e);
+                if (data.role === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'dashboard.html';
                 }
-
-                window.location.href = 'index.html';
             } else {
                 const data = await response.json();
                 let message = 'Login failed';
