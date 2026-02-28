@@ -7,8 +7,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function checkAuth() {
     const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+
     if (!token) {
         window.location.href = 'login.html';
+        return;
+    }
+
+    if (role === 'admin') {
+        window.location.href = 'admin.html';
+        return;
     }
 }
 

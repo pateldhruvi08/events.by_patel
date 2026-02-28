@@ -30,13 +30,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function checkAdmin() {
-    // Ideally verify token role. For now, if no token, redirect.
     const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+
     if (!token) {
         window.location.href = 'login.html';
         return;
     }
-    // Could call /users/me to verify is_superuser
+
+    if (role !== 'admin') {
+        window.location.href = 'dashboard.html';
+        return;
+    }
 }
 
 // --- SERVICES ---
