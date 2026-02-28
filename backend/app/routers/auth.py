@@ -66,3 +66,45 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     )
     role = "admin" if user.is_superuser else "customer"
     return {"access_token": access_token, "token_type": "bearer", "role": role}
+
+from ..dependencies import get_current_user
+
+@router.post("/forgot-password")
+def forgot_password(request_data: schemas.ForgotPasswordRequest, db: Session = Depends(database.get_db)):
+    user = db.query(models.User).filter(models.User.email == request_data.email).first()
+    if not user:
+        # We still return 200 to prevent email enumeration
+        return {"message": "If an account with that email exists, a password reset link has been sent."}
+    
+    reset_token = utils.create_password_reset_token(email=user.email)
+    
+    mail_sent = utils.send_reset_password_email(user.email, reset_token, request_data.frontend_url)
+    if not mail_sent:
+        raise HTTPException(status_code=500, detail="Failed to send password reset email")
+        
+    return {"message": "If an account with that email exists, a password reset link has been sent."}
+
+@router.post("/reset-password")
+def reset_password(request_data: schemas.ResetPasswordRequest, db: Session = Depends(database.get_db)):
+    email = utils.verify_password_reset_token(request_data.token)
+    if not email:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+        
+    user = db.query(models.User).filter(models.User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    user.hashed_password = utils.get_password_hash(request_data.new_password)
+    db.commit()
+    
+    return {"message": "Password has been reset successfully"}
+
+@router.post("/change-password")
+def change_password(request_data: schemas.ChangePasswordRequest, current_user: models.User = Depends(get_current_user), db: Session = Depends(database.get_db)):
+    if not utils.verify_password(request_data.old_password, current_user.hashed_password):
+        raise HTTPException(status_code=400, detail="Invalid old password")
+        
+    current_user.hashed_password = utils.get_password_hash(request_data.new_password)
+    db.commit()
+    
+    return {"message": "Password changed successfully"}

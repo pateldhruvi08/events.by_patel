@@ -85,16 +85,6 @@
 
                         <h3
                             style="margin-top:30px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                            Security</h3>
-                        <div class="form-group" style="margin-bottom: 15px;">
-                            <label style="display:block; margin-bottom: 5px; font-weight:bold;">New Password (leave
-                                blank to keep current)</label>
-                            <input type="password" id="setting-password" placeholder="New Password"
-                                style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
-                        </div>
-
-                        <h3
-                            style="margin-top:30px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
                             Notification & Booking Preferences</h3>
                         <div class="form-group" style="margin-bottom: 10px; display:flex; align-items:center;">
                             <input type="checkbox" id="setting-notif-email"
@@ -107,9 +97,27 @@
                                 style="margin-right: 10px; transform: scale(1.2);">
                             <label for="setting-notif-sms" style="cursor:pointer;">Receive SMS Alerts</label>
                         </div>
-
                         <button type="submit" class="btn" style="width: 100%; padding: 12px; font-size: 1.1em;">Save
-                            Settings</button>
+                            Profile Settings</button>
+                    </form>
+
+                    <form id="password-form" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+                        <h3 style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                            Change Password</h3>
+                        <div id="pwd-status-msg"
+                            style="display: none; padding: 10px; margin-bottom: 10px; border-radius: 4px;"></div>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="display:block; margin-bottom: 5px; font-weight:bold;">Current Password</label>
+                            <input type="password" id="current-password" required
+                                style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label style="display:block; margin-bottom: 5px; font-weight:bold;">New Password</label>
+                            <input type="password" id="new-password" required minlength="6"
+                                style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%; padding: 12px; font-size: 1.1em;">Change
+                            Password</button>
                     </form>
 
                     <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ffcccc;">

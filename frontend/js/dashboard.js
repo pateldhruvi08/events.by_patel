@@ -184,23 +184,62 @@ if (settingsForm) {
             notification_sms: document.getElementById('setting-notif-sms').checked
         };
 
-        const password = document.getElementById('setting-password').value;
-        if (password) {
-            payload.password = password;
-        }
-
         try {
             const response = await Api.put('/users/me', payload, true);
             if (response.ok) {
-                alert('Settings updated successfully!');
+                alert('Profile settings updated successfully!');
                 fetchUserProfile(); // Refresh display
             } else {
                 const data = await response.json();
-                alert('Failed to update settings: ' + (data.detail || 'Unknown error'));
+                alert('Failed to update profile: ' + (data.detail || 'Unknown error'));
             }
         } catch (error) {
             console.error('Settings update error', error);
             alert('An error occurred while updating settings.');
+        }
+    });
+}
+
+const passwordForm = document.getElementById('password-form');
+if (passwordForm) {
+    passwordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const oldPwd = document.getElementById('current-password').value;
+        const newPwd = document.getElementById('new-password').value;
+        const statusMsg = document.getElementById('pwd-status-msg');
+        const btn = e.target.querySelector('button');
+
+        btn.textContent = 'Updating...';
+        btn.disabled = true;
+
+        try {
+            const res = await Api.post('/auth/change-password', {
+                old_password: oldPwd,
+                new_password: newPwd
+            }, true); // Send token using the 3rd argument 'true'
+
+            if (res.ok) {
+                statusMsg.textContent = "Password changed successfully!";
+                statusMsg.style.display = 'block';
+                statusMsg.style.backgroundColor = '#d4edda';
+                statusMsg.style.color = '#155724';
+                e.target.reset();
+            } else {
+                const data = await res.json();
+                statusMsg.textContent = data.detail || "Failed to change password";
+                statusMsg.style.display = 'block';
+                statusMsg.style.backgroundColor = '#f8d7da';
+                statusMsg.style.color = '#721c24';
+            }
+        } catch (error) {
+            statusMsg.textContent = "An error occurred";
+            statusMsg.style.display = 'block';
+            statusMsg.style.backgroundColor = '#f8d7da';
+            statusMsg.style.color = '#721c24';
+        } finally {
+            btn.textContent = 'Change Password';
+            btn.disabled = false;
         }
     });
 }

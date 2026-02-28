@@ -43,6 +43,19 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: Optional[str] = None
 
+# Password Schemas
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+    frontend_url: str
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+class ChangePasswordRequest(BaseModel):
+    old_password: str
+    new_password: str
+
 # Service Schemas
 class ServiceBase(BaseModel):
     name: str

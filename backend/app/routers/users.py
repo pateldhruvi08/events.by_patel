@@ -40,7 +40,7 @@ def update_user_me(user_update: schemas.UserUpdate, db: Session = Depends(databa
         current_user.notification_sms = user_update.notification_sms
         
     if user_update.password is not None and len(user_update.password) > 0:
-        hashed_password = utils.hash_password(user_update.password)
+        hashed_password = utils.get_password_hash(user_update.password)
         current_user.hashed_password = hashed_password
 
     db.commit()
