@@ -42,3 +42,33 @@ app.include_router(likes.router)
 @app.get("/")
 def read_root():
     return {"message": "Welcome to Event Management System API"}
+
+@app.on_event("startup")
+def populate_default_services():
+    from .database import SessionLocal
+    from . import models
+    
+    db = SessionLocal()
+    try:
+        # Check if services table is completely empty
+        if db.query(models.Service).count() == 0:
+            print("Database empty. Auto-populating default services...")
+            default_services = [
+                models.Service(name="Wedding Planning", description="Complete wedding decoration including floral arrangements, stage setup, and lighting.", price=5000.0, category="Wedding", image_url="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"),
+                models.Service(name="Corporate Events", description="Professional setup for corporate events, including podiums, backdrops, and seating.", price=2500.0, category="Corporate", image_url="https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"),
+                models.Service(name="Birthday Decoration", description="Colorful and fun decorations for birthday parties of all ages.", price=800.0, category="Birthday", image_url="https://images.unsplash.com/photo-1530103862676-de3c9a59af57?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"),
+                models.Service(name="Baby Shower", description="Celebrate the arrival of your little one with themed decorations and games.", price=1200.0, category="Baby Shower", image_url="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"),
+                models.Service(name="Anniversary", description="Timeless and romantic decorations for your special milestone.", price=1500.0, category="Anniversary", image_url="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"),
+                models.Service(name="Home Decor", description="Add festive charm to your home for pujas, festivals, and gatherings.", price=2000.0, category="Home Decor", image_url="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80")
+            ]
+            db.add_all(default_services)
+            db.commit()
+    except Exception as e:
+        print(f"Auto-populate error: {e}")
+    finally:
+        db.close()
+
+@app.get("/status")
+def get_status():
+    from .database import engine
+    return {"database_connected": True, "database_dialect": engine.dialect.name}
