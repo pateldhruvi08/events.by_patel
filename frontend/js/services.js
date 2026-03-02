@@ -5,11 +5,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function fetchServices() {
     const grid = document.getElementById('services-grid');
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 50px 20px;">
+                <i class="fas fa-lock fa-3x" style="color: #ccc; margin-bottom: 20px;"></i>
+                <h3 style="color: var(--secondary-color); margin-bottom: 10px;">Access Restricted</h3>
+                <p style="font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto 20px auto;">
+                    You need to log in to access our Services and Gallery sections. Please <a href="login.html" style="color: var(--primary-color); text-decoration: underline; font-weight: bold;">log in</a> to continue.
+                </p>
+            </div>`;
+        return;
+    }
+
+    grid.innerHTML = '<p style="text-align:center; width: 100%;">Loading services...</p>';
+
     try {
         const services = await Api.get('/services/');
 
         if (!services || services.length === 0) {
-            grid.innerHTML = '<div style="col-span: 3; text-align: center;"><p>No services found.</p></div>';
+            grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center;"><p>No services found.</p></div>';
             return;
         }
 

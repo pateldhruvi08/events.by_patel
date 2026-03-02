@@ -120,6 +120,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to render images
     async function renderGallery(category = 'all') {
+        if (!token) {
+            galleryGrid.style.display = 'block'; // Ensure block display for the message
+            galleryGrid.innerHTML = `
+                <div style="text-align: center; padding: 50px 20px; width: 100%;">
+                    <i class="fas fa-lock fa-3x" style="color: #ccc; margin-bottom: 20px;"></i>
+                    <h3 style="color: var(--secondary-color); margin-bottom: 10px;">Access Restricted</h3>
+                    <p style="font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto 20px auto;">
+                        You need to log in to access our Services and Gallery sections. Please <a href="login.html" style="color: var(--primary-color); text-decoration: underline; font-weight: bold;">log in</a> to continue.
+                    </p>
+                </div>`;
+            galleryGrid.style.opacity = '1';
+
+            // disable filter buttons if not logged in
+            filterButtons.forEach(btn => {
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+                btn.disabled = true;
+            });
+            return;
+        }
+
         galleryGrid.innerHTML = ''; // Clear existing
         galleryGrid.style.opacity = '0'; // Fade out effect styling prep
 
@@ -130,8 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (e) {
                 console.error("Failed to load likes from server", e);
             }
-        } else {
-            likedPhotos = JSON.parse(localStorage.getItem('liked_photos') || '[]');
         }
 
         currentImages = category === 'all'
