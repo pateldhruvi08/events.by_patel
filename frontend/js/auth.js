@@ -101,7 +101,11 @@ if (loginForm) {
             }
         } catch (error) {
             console.error('Login Error:', error);
-            errorMsg.textContent = 'An error occurred: ' + error.message;
+            if (error.message.includes('Failed to fetch')) {
+                errorMsg.textContent = 'Server unreachable. If testing locally, ensure backend is running. If on Render, please wait up to 50 seconds for it to wake up!';
+            } else {
+                errorMsg.textContent = 'An error occurred: ' + error.message;
+            }
             errorMsg.style.display = 'block';
         }
     });

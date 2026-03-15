@@ -100,7 +100,7 @@ async def upload_image(file: UploadFile = File(...), current_user: models.User =
             shutil.copyfileobj(file.file, buffer)
             
         # URL construction (Hardcoded localhost for now, ideally strictly relative or config driven)
-        url = f"http://localhost:8000/static/uploads/{filename}"
+        url = f"/static/uploads/{filename}"
         return {"url": url}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

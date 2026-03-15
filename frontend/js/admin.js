@@ -56,9 +56,9 @@ async function fetchServices() {
             if (lowerName.includes('wedding')) return 'images/wedding/img4.jpeg';
             if (lowerName.includes('birthday')) return 'images/birthday/img28.jpeg';
             if (lowerName.includes('corporate')) return 'images/corporate/img35.jpeg';
-            if (lowerName.includes('baby')) return 'images/baby shower/img20.jpeg';
+            if (lowerName.includes('baby')) return 'images/baby-shower/img20.jpeg';
             if (lowerName.includes('anniversary')) return 'images/anniversery/img27.jpeg';
-            if (lowerName.includes('decor') || lowerName.includes('home')) return 'images/home decor&welcome/img78.jpeg';
+            if (lowerName.includes('decor') || lowerName.includes('home')) return 'images/home-decor-welcome/img78.jpeg';
             return 'images/wedding/img1.jpeg';
         }
 

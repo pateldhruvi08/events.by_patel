@@ -54,37 +54,37 @@ const galleryImages = [
     { src: 'images/birthday/img99.jpeg', category: 'birthday' },
     { src: 'images/birthday/WhatsApp Image 2026-02-19 at 10.43.35 PM.jpeg', category: 'birthday' },
     { src: 'images/birthday/WhatsApp Image 2026-02-19 at 10.45.25 PM.jpeg', category: 'birthday' },
-    { src: 'images/baby shower/img18.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/img19.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/img20.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/img22.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/img23.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/img24.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/img25.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/img26.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/img90.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/WhatsApp Image 2026-02-19 at 10.40.16 PM.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/WhatsApp Image 2026-02-19 at 10.43.35 PM.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/WhatsApp Image 2026-02-19 at 10.45.25 PM.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/WhatsApp Image 2026-02-19 at 10.45.26 PM.jpeg', category: 'baby-shower' },
-    { src: 'images/baby shower/WhatsApp Image 2026-02-19 at 10.45.27 PM.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/img18.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/img19.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/img20.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/img22.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/img23.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/img24.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/img25.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/img26.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/img90.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/WhatsApp Image 2026-02-19 at 10.40.16 PM.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/WhatsApp Image 2026-02-19 at 10.43.35 PM.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/WhatsApp Image 2026-02-19 at 10.45.25 PM.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/WhatsApp Image 2026-02-19 at 10.45.26 PM.jpeg', category: 'baby-shower' },
+    { src: 'images/baby-shower/WhatsApp Image 2026-02-19 at 10.45.27 PM.jpeg', category: 'baby-shower' },
     { src: 'images/anniversery/img27.jpeg', category: 'anniversary' },
     { src: 'images/anniversery/img86.jpeg', category: 'anniversary' },
     { src: 'images/anniversery/img95.jpeg', category: 'anniversary' },
     { src: 'images/anniversery/img96.jpeg', category: 'anniversary' },
     { src: 'images/anniversery/img97.jpeg', category: 'anniversary' },
     { src: 'images/anniversery/img98.jpeg', category: 'anniversary' },
-    { src: 'images/home decor&welcome/img74.jpeg', category: 'home-decor' },
-    { src: 'images/home decor&welcome/img75.jpeg', category: 'home-decor' },
-    { src: 'images/home decor&welcome/img76.jpeg', category: 'home-decor' },
-    { src: 'images/home decor&welcome/img77.jpeg', category: 'home-decor' },
-    { src: 'images/home decor&welcome/img78.jpeg', category: 'home-decor' },
-    { src: 'images/home decor&welcome/img79.jpeg', category: 'home-decor' },
-    { src: 'images/home decor&welcome/img81.jpeg', category: 'home-decor' },
-    { src: 'images/home decor&welcome/img82.jpeg', category: 'home-decor' },
-    { src: 'images/home decor&welcome/img83.jpeg', category: 'home-decor' },
-    { src: 'images/home decor&welcome/img84.jpeg', category: 'home-decor' },
-    { src: 'images/home decor&welcome/img85.jpeg', category: 'home-decor' }
+    { src: 'images/home-decor-welcome/img74.jpeg', category: 'home-decor' },
+    { src: 'images/home-decor-welcome/img75.jpeg', category: 'home-decor' },
+    { src: 'images/home-decor-welcome/img76.jpeg', category: 'home-decor' },
+    { src: 'images/home-decor-welcome/img77.jpeg', category: 'home-decor' },
+    { src: 'images/home-decor-welcome/img78.jpeg', category: 'home-decor' },
+    { src: 'images/home-decor-welcome/img79.jpeg', category: 'home-decor' },
+    { src: 'images/home-decor-welcome/img81.jpeg', category: 'home-decor' },
+    { src: 'images/home-decor-welcome/img82.jpeg', category: 'home-decor' },
+    { src: 'images/home-decor-welcome/img83.jpeg', category: 'home-decor' },
+    { src: 'images/home-decor-welcome/img84.jpeg', category: 'home-decor' },
+    { src: 'images/home-decor-welcome/img85.jpeg', category: 'home-decor' }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -291,7 +291,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Initial render
-    renderGallery();
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParam = urlParams.get('filter') || 'all';
+
+    // Set correct active button
+    filterButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-filter') === filterParam) {
+            btn.classList.add('active');
+        }
+    });
+
+    renderGallery(filterParam);
 
     // Filter click events
     filterButtons.forEach(btn => {

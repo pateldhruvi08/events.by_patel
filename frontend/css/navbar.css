@@ -1,20 +1,23 @@
 .navbar {
-    background-color: var(--white);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-sm);
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all var(--transition-speed) ease;
 }
 
 .navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 70px;
+    height: 80px;
 }
-
 
 .logo {
     display: flex;
@@ -23,21 +26,20 @@
 
 .logo-img {
     height: 60px;
-    /* Slightly increased logo size */
     width: auto;
+    border-radius: 8px; /* Optional, depending on logo */
 }
 
 .nav-links {
     display: flex;
-    gap: 25px;
+    gap: 32px;
     align-items: center;
 }
 
 .nav-links a {
     color: var(--secondary-color);
     font-weight: 500;
-    font-size: 1.15rem;
-    text-decoration: none;
+    font-size: 1.05rem;
     position: relative;
     transition: color var(--transition-speed);
 }
@@ -45,13 +47,13 @@
 .nav-links a::after {
     content: '';
     position: absolute;
-    bottom: -5px;
+    bottom: -6px;
     left: 0;
     width: 0;
     height: 2px;
-    background-color: var(--primary-color);
-    /* #d4af37 */
+    background: var(--gradient-primary);
     transition: width 0.3s ease;
+    border-radius: 2px;
 }
 
 .nav-links a:hover::after {
@@ -59,10 +61,11 @@
 }
 
 .logo-text {
-    margin-left: 10px;
-    font-size: 1.3rem;
-    font-weight: 600;
+    margin-left: 12px;
+    font-size: 1.4rem;
+    font-weight: 700;
     color: var(--secondary-color);
+    letter-spacing: -0.5px;
 }
 
 .nav-links a:hover {
@@ -70,8 +73,8 @@
 }
 
 .nav-auth .btn {
-    padding: 8px 15px;
-    margin-left: 10px;
+    padding: 10px 20px;
+    margin-left: 15px;
 }
 
 /* Profile Dropdown Menu */
@@ -85,41 +88,45 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 8px 16px;
-    height: 40px;
-    border-radius: 20px;
-    background-color: var(--primary-color);
+    padding: 8px 20px;
+    height: 44px;
+    border-radius: 22px;
+    background: var(--gradient-primary);
     color: var(--white);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     margin-left: 15px;
-    transition: background-color var(--transition-speed);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-speed) ease;
 }
 
 .profile-icon i {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .profile-icon:hover {
-    background-color: #b3922b;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    filter: brightness(1.05);
 }
 
 .dropdown-content {
     display: block;
     position: absolute;
     right: 0;
-    top: 55px;
+    top: 60px;
     background-color: var(--white);
-    min-width: 180px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    min-width: 200px;
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(0,0,0,0.05);
     z-index: 1000;
     overflow: hidden;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dropdown-content.show {
@@ -130,19 +137,24 @@
 
 .dropdown-content a {
     color: var(--text-color);
-    padding: 12px 16px;
+    padding: 14px 20px;
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 1rem;
+    gap: 12px;
+    font-size: 0.95rem;
     font-weight: 500;
-    transition: background-color var(--transition-speed), color var(--transition-speed);
+    transition: all var(--transition-speed) ease;
+}
+
+.dropdown-content a:not(:last-child) {
+    border-bottom: 1px solid rgba(0,0,0,0.03);
 }
 
 .dropdown-content a:hover {
     background-color: var(--light-bg);
     color: var(--primary-color);
+    padding-left: 24px;
 }
 
 /* Responsive Navbar */
@@ -150,17 +162,16 @@
     .navbar .container {
         flex-wrap: wrap;
         height: auto;
-        padding: 10px 15px;
+        padding: 15px 20px;
     }
 
     .logo-img {
-        height: 40px;
+        height: 45px;
     }
 
     .logo-text {
-        font-size: 1.1rem;
-        margin-left: 5px;
-        white-space: nowrap;
+        font-size: 1.2rem;
+        margin-left: 10px;
     }
 
     .nav-links {
@@ -169,7 +180,7 @@
         justify-content: center;
         margin-top: 15px;
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 20px;
     }
 
     .nav-links a {
@@ -183,20 +194,20 @@
     }
 
     .profile-icon {
-        height: 35px;
+        height: 38px;
         font-size: 0.9rem;
-        padding: 5px 12px;
+        padding: 6px 16px;
         margin-left: 10px;
     }
 
     .nav-auth .btn {
-        padding: 6px 12px;
+        padding: 8px 16px;
         font-size: 0.9rem;
-        margin-left: 5px;
+        margin-left: 10px;
     }
 
     .dropdown-content {
-        top: 45px;
-        min-width: 150px;
+        top: 50px;
+        min-width: 180px;
     }
 }

@@ -1,45 +1,89 @@
-/* Forms */
+/* Modern Forms */
 .form-container {
-    max-width: 400px;
-    margin: 100px auto;
-    padding: 30px;
-    background-color: var(--white);
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 450px;
+    margin: 120px auto 100px;
+    padding: 40px;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .form-group label {
     display: block;
     margin-bottom: 8px;
     color: var(--secondary-color);
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-sm);
     font-size: 1rem;
+    color: var(--text-color);
+    background-color: #f8fafc;
+    transition: all var(--transition-speed) ease;
+    font-family: var(--font-main);
 }
 
-.form-group input:focus {
+.form-group input:hover,
+.form-group textarea:hover,
+.form-group select:hover {
+    border-color: #cbd5e1;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
     border-color: var(--primary-color);
     outline: none;
+    background-color: var(--white);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15); /* Soft primary glow */
+}
+
+.form-container h2 {
+    color: var(--secondary-color);
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.form-container h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
 }
 
 .auth-links {
-    margin-top: 15px;
+    margin-top: 25px;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    color: var(--text-muted);
 }
 
 .auth-links a {
     color: var(--primary-color);
-    font-weight: bold;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.auth-links a:hover {
+    color: var(--primary-light);
 }
