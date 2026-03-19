@@ -1,8 +1,7 @@
 .dashboard-container {
     display: flex;
     min-height: 100vh;
-    padding-top: 70px;
-    /* Navbar height */
+    padding-top: 90px;
     background-color: #f4f6f8;
 }
 
@@ -117,6 +116,7 @@
 @media (max-width: 768px) {
     .dashboard-container {
         flex-direction: column;
+        padding-top: 160px;
     }
 
     .sidebar {

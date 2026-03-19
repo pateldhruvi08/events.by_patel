@@ -32,6 +32,8 @@ body {
     line-height: 1.6;
     color: var(--text-color);
     background-color: var(--light-bg);
+    overflow-x: hidden;
+    width: 100%;
 }
 
 a {
@@ -183,6 +185,14 @@ ul {
     border-radius: 2px;
 }
 
+/* Reusable Page Headers */
+.page-header-title {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
 /* Footer Styles */
 .footer {
     background-color: var(--secondary-color);
@@ -291,4 +301,44 @@ ul {
 
 .feature-card p {
     color: var(--text-color);
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    text-align: center;
+}
+
+/* Base Responsive rules for global styles */
+@media (max-width: 992px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+    .page-header-title {
+        font-size: 2.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    .page-header-title {
+        font-size: 2.1rem;
+    }
+    .hero p {
+        font-size: 1.1rem;
+    }
+    .section-title {
+        font-size: 1.8rem;
+    }
 }

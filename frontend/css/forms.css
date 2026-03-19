@@ -87,3 +87,11 @@
 .auth-links a:hover {
     color: var(--primary-light);
 }
+
+/* Responsive updates for forms */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 30px 20px;
+        margin: 60px 15px;
+    }
+}
