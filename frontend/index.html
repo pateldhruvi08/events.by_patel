@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <nav class="navbar">
+    <nav class="navbar navbar-transparent" id="navbar">
         <div class="container">
             <a href="index.html" class="logo"><img src="images/logo.jpeg" alt="Event's by Patel" class="logo-img"> <span
                     class="logo-text">Event's By Patel</span></a>
@@ -32,16 +32,21 @@
         </div>
     </nav>
 
-    <header class="hero" style="background-color: #000;">
+    <header class="hero premium-hero">
         <div class="hero-bg-slider">
             <div class="hero-bg-slide" style="animation-delay: 0s; background-image: url('images/wedding/img1.jpeg');">
             </div>
             <div class="hero-bg-slide" style="animation-delay: 5s; background-image: url('images/wedding/img3.jpeg');">
             </div>
         </div>
-        <div class="container">
-            <h1>Make Your Event Unforgettable</h1>
-            <p>We specialize in wedding, birthday, and corporate event planning with premium decorations.</p>
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1 class="hero-premium-title">Make Your Event<br><span class="highlight-text">Unforgettable</span></h1>
+            <p class="hero-premium-subtitle">We specialize in premium wedding aesthetics that reflect your unique love story.<br>Discover how we can make your dream wedding a reality.</p>
+            <div class="hero-buttons">
+                <a href="gallery.html" class="btn btn-premium">View Portfolio</a>
+                <a href="contact.html" class="btn btn-outline-premium">Contact Us</a>
+            </div>
         </div>
     </header>
 
@@ -287,6 +292,19 @@
     <script src="js/contact.js?v=42.0"></script>
     <script src="js/home-gallery.js?v=42.0"></script>
     <script src="js/home-animations.js?v=42.0"></script>
+    <script>
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 60) {
+                nav.classList.add('scrolled');
+                nav.classList.remove('navbar-transparent');
+            } else {
+                nav.classList.remove('scrolled');
+                nav.classList.add('navbar-transparent');
+            }
+        });
+    </script>
 </body>
 
 </html>

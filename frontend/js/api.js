@@ -3,6 +3,17 @@ const isLocalhost = window.location.hostname === 'localhost' || window.location.
 const API_URL = isLocalhost ? 'http://localhost:8000' : 'https://events-by-patel.onrender.com';
 
 class Api {
+    static async handleAuthError(response) {
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('role');
+            if (!window.location.href.includes('login.html')) {
+                window.location.href = 'login.html?expired=1';
+            }
+        }
+        return response;
+    }
+
     static async get(endpoint, requireAuth = false) {
         const headers = {
             'Content-Type': 'application/json'
@@ -19,6 +30,7 @@ class Api {
                 method: 'GET',
                 headers: headers
             });
+            await Api.handleAuthError(response);
             if (!response.ok) throw new Error('Network response was not ok');
             return await response.json();
         } catch (error) {
@@ -39,7 +51,7 @@ class Api {
                 headers: headers,
                 body: JSON.stringify(data)
             });
-            return response;
+            return await Api.handleAuthError(response);
         } catch (error) {
             console.error('API Post Error:', error);
             throw error;
@@ -58,7 +70,7 @@ class Api {
                 headers: headers,
                 body: JSON.stringify(data)
             });
-            return response;
+            return await Api.handleAuthError(response);
         } catch (error) {
             console.error('API Put Error:', error);
             throw error;
@@ -77,7 +89,7 @@ class Api {
                 headers: headers,
                 body: data ? JSON.stringify(data) : null
             });
-            return response;
+            return await Api.handleAuthError(response);
         } catch (error) {
             console.error('API Patch Error:', error);
             throw error;
@@ -95,7 +107,7 @@ class Api {
                 method: 'DELETE',
                 headers: headers
             });
-            return response;
+            return await Api.handleAuthError(response);
         } catch (error) {
             console.error('API Delete Error:', error);
             throw error;

@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str = "your-super-secret-key"
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 43200 # 30 days for persistent session
 
     # Email
     EMAIL_USER: str | None = None

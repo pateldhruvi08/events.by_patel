@@ -1,5 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     updateNav();
+
+    // Show session expired message if redirected
+    if (window.location.href.includes('login.html?expired=1')) {
+        const errorMsg = document.getElementById('error-msg');
+        if (errorMsg) {
+            errorMsg.textContent = 'Your session has expired or is invalid. Please log in again.';
+            errorMsg.style.display = 'block';
+            
+            // Clean URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    }
 });
 
 async function updateNav() {

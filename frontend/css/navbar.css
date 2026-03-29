@@ -22,18 +22,21 @@
 .logo {
     display: flex;
     align-items: center;
+    flex: 1;
 }
 
 .logo-img {
     height: 60px;
     width: auto;
-    border-radius: 8px; /* Optional, depending on logo */
+    border-radius: 8px; 
 }
 
 .nav-links {
     display: flex;
-    gap: 32px;
+    gap: 35px;
     align-items: center;
+    flex: 2;
+    justify-content: center;
 }
 
 .nav-links a {
@@ -43,6 +46,7 @@
     position: relative;
     transition: color var(--transition-speed);
 }
+
 
 .nav-links a::after {
     content: '';
@@ -72,9 +76,56 @@
     color: var(--primary-color);
 }
 
+.nav-auth {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+}
+
 .nav-auth .btn {
-    padding: 10px 20px;
+    padding: 10px 24px;
     margin-left: 15px;
+    border-radius: var(--radius-lg); /* More elegant rounded buttons */
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Premium Transparent Navbar Classes */
+.navbar.navbar-transparent {
+    background-color: transparent;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.navbar.navbar-transparent .nav-links a,
+.navbar.navbar-transparent .logo-text {
+    color: var(--white);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.navbar.navbar-transparent .nav-links a::after {
+    background: var(--white);
+}
+
+.navbar.scrolled {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: var(--shadow-md) !important;
+    border-bottom: none;
+}
+
+.navbar.scrolled .nav-links a {
+    color: var(--secondary-color);
+    text-shadow: none;
+}
+
+.navbar.scrolled .nav-links a::after {
+    background: var(--gradient-primary);
+}
+
+.navbar.scrolled .logo-text {
+    color: var(--secondary-color);
+    text-shadow: none;
 }
 
 /* Profile Dropdown Menu */
