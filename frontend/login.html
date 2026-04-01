@@ -15,54 +15,133 @@
             display: flex;
             align-items: center;
         }
+
         .password-container input {
-            padding-right: 40px; /* Make room for the icon */
+            padding-right: 40px;
+            /* Make room for the icon */
         }
+
         .password-container i {
             position: absolute;
             right: 12px;
             cursor: pointer;
             color: #666;
         }
+
         .password-container i:hover {
             color: var(--primary-color);
         }
+        
+        /* Extreme Height Compression */
+        .form-group { margin-bottom: 12px !important; }
+        .form-group label { margin-bottom: 4px !important; font-size: 0.85rem !important; }
+        .form-group input { padding: 8px 12px !important; font-size: 0.95rem !important; }
+        .btn { padding: 10px !important; font-size: 0.95rem !important; }
+        .divider { margin: 12px 0 !important; }
+        .social-login { gap: 8px !important; }
+        .btn-social { padding: 8px !important; font-size: 0.9rem !important; }
     </style>
 </head>
 
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="index.html" class="logo"><img src="images/logo.jpeg" alt="Event Master" class="logo-img"> <span
-                    class="logo-text">Event's By Patel</span></a>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="services.html">Services</a>
-            </div>
-        </div>
-    </nav>
+<body
+    style="background: url('images/wedding/img4.jpeg') no-repeat center center fixed; background-size: cover; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <!-- Blur Overlay Container -->
+    <div
+        style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); backdrop-filter:blur(15px); z-index:-1;">
+    </div>
 
-    <div class="container">
-        <div class="form-container">
-            <h2 style="text-align: center; margin-bottom: 20px;">Login</h2>
-            <div id="error-msg" style="color: red; text-align: center; display: none; margin-bottom: 10px;"></div>
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="password-container">
-                        <input type="password" id="password" required>
-                        <i class="fas fa-eye" id="togglePassword"></i>
+    <!-- Back to Home Button -->
+    <a href="index.html" style="position: absolute; top: 25px; left: 25px; display: flex; align-items: center; gap: 8px; color: #fff; text-decoration: none; font-size: 0.95rem; font-weight: 500; padding: 8px 16px; background: rgba(255,255,255,0.15); border-radius: 20px; backdrop-filter: blur(10px); transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 10;" onmouseover="this.style.background='rgba(255,255,255,0.25)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='rgba(255,255,255,0.15)'; this.style.transform='translateY(0)';">
+        <i class="fas fa-home"></i> Back to Home
+    </a>
+
+    <div class="auth-wrapper" style="width: 100%; max-width: 420px; padding: 20px;">
+        <!-- Logo ABOVE the card -->
+        <div class="auth-logo-header" style="text-align: center; margin-bottom: 12px;">
+            <a href="index.html" style="text-decoration: none;">
+                <img src="images/logo.jpeg" alt="Event's By Patel Logo"
+                    style="width: 50px; height: 50px; border-radius: 12px; margin-bottom: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+                <h2
+                    style="color: #ffffff; font-size: 1.5rem; margin: 0; font-weight: 700; letter-spacing: -0.5px; text-shadow: 0 4px 10px rgba(0,0,0,0.6);">
+                    Event's By Patel</h2>
+            </a>
+        </div>
+
+        <div class="form-container"
+            style="background: rgba(255,255,255,0.95); border-radius: var(--radius-lg); width: 100%; padding: 25px 20px; margin: 0; box-shadow: 0 20px 40px rgba(0,0,0,0.25);">
+
+            <!-- Tab Switching -->
+            <div class="auth-tabs" style="display: flex; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0;">
+                <button class="auth-tab active" onclick="switchTab('login')" id="tab-login"
+                    style="flex: 1; padding: 10px; border: none; background: transparent; font-size: 1rem; font-weight: 600; color: var(--primary-color); border-bottom: 2px solid var(--primary-color); margin-bottom: -2px; cursor: pointer; transition: all 0.3s;">Login</button>
+                <button class="auth-tab" onclick="switchTab('register')" id="tab-register"
+                    style="flex: 1; padding: 10px; border: none; background: transparent; font-size: 1rem; font-weight: 600; color: #64748b; cursor: pointer; transition: all 0.3s;">Register</button>
+            </div>
+
+            <div id="error-msg"
+                style="color: #ef4444; background: #fee2e2; border-radius: 6px; padding: 8px; font-size: 0.85rem; text-align: center; display: none; margin-bottom: 10px; border: 1px solid #fca5a5;">
+            </div>
+
+            <!-- LOGIN SECTION -->
+            <div id="login-section">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required>
                     </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="password-container">
+                            <input type="password" id="password" required>
+                            <i class="fas fa-eye" id="togglePassword"></i>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%; margin-top: 5px;">Login</button>
+                </form>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="forgot-password.html"
+                        style="font-size: 0.9rem; color: #64748b; text-decoration: none; font-weight: 500;">Forgot your
+                        password?</a>
                 </div>
-                <button type="submit" class="btn" style="width: 100%;">Login</button>
-            </form>
-            <div class="auth-links">
-                <p>Don't have an account? <a href="register.html">Register here</a></p>
-                <p style="margin-top: 10px;"><a href="forgot-password.html">Forgot your password?</a></p>
+            </div>
+
+            <!-- REGISTER SECTION -->
+            <div id="register-section" style="display: none;">
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="reg-username">Username</label>
+                        <input type="text" id="reg-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" required>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%; margin-top: 5px;">Register</button>
+                </form>
+            </div>
+
+            <!-- Social Login applies to both -->
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <div class="social-login">
+                <button type="button" class="btn-social btn-google" onclick="socialMockLogin('Google')">
+                    <svg width="20" height="20" viewBox="0 0 48 48" style="margin-right: 10px;">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                        <path fill="none" d="M0 0h48v48H0z"/>
+                    </svg> Continue with Google
+                </button>
+                <button type="button" class="btn-social btn-apple" onclick="socialMockLogin('Apple')">
+                    <i class="fab fa-apple"></i> Continue with Apple
+                </button>
             </div>
         </div>
     </div>
@@ -70,18 +149,61 @@
     <script src="js/api.js?v=42.0"></script>
     <script src="js/auth.js?v=42.0"></script>
     <script>
+        // Password Toggle
         const togglePassword = document.querySelector('#togglePassword');
         const passwordInput = document.querySelector('#password');
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        }
 
-        togglePassword.addEventListener('click', function () {
-            // Toggle the type attribute
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            
-            // Toggle the icon
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
-        });
+        // Tab Switching Logic
+        function switchTab(tab) {
+            const loginSec = document.getElementById('login-section');
+            const regSec = document.getElementById('register-section');
+            const tabLogin = document.getElementById('tab-login');
+            const tabReg = document.getElementById('tab-register');
+            const errorMsg = document.getElementById('error-msg');
+
+            errorMsg.style.display = 'none'; // clear errors on switch
+
+            if (tab === 'login') {
+                loginSec.style.display = 'block';
+                regSec.style.display = 'none';
+
+                tabLogin.style.color = 'var(--primary-color)';
+                tabLogin.style.borderBottom = '2px solid var(--primary-color)';
+
+                tabReg.style.color = '#64748b';
+                tabReg.style.borderBottom = 'none';
+            } else {
+                loginSec.style.display = 'none';
+                regSec.style.display = 'block';
+
+                tabReg.style.color = 'var(--primary-color)';
+                tabReg.style.borderBottom = '2px solid var(--primary-color)';
+
+                tabLogin.style.color = '#64748b';
+                tabLogin.style.borderBottom = 'none';
+            }
+        }
+
+        // Check if user came from register page originally
+        if (window.location.hash === '#register') {
+            switchTab('register');
+        }
+
+        // Fast Social Login Connect
+        function socialMockLogin(provider) {
+            alert(`Authenticating with ${provider}... Simulated Success!`);
+            localStorage.setItem('token', 'simulated_oauth_token_' + provider);
+            localStorage.setItem('role', 'customer');
+            window.location.href = 'dashboard.html';
+        }
     </script>
 </body>
 
