@@ -125,6 +125,12 @@ async function fetchBookings() {
     tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Loading...</td></tr>';
     try {
         const bookings = await Api.get('/admin/bookings', true);
+        
+        if (bookings.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 20px;">No bookings found yet.</td></tr>';
+            return;
+        }
+
         tbody.innerHTML = bookings.map(b => `
             <tr style="border-bottom:1px solid #eee;">
                 <td style="padding:10px;">${b.id}</td>
@@ -278,6 +284,12 @@ async function fetchUsers() {
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Loading...</td></tr>';
     try {
         const users = await Api.get('/admin/users', true);
+        
+        if (users.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 20px;">No users found.</td></tr>';
+            return;
+        }
+
         tbody.innerHTML = users.map(u => `
             <tr style="border-bottom:1px solid #eee;">
                 <td style="padding:10px;">${u.id}</td>

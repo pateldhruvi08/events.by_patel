@@ -283,8 +283,8 @@ ul {
 .footer {
     background-color: var(--secondary-color);
     color: var(--white);
-    padding: 80px 0 30px;
-    margin-top: 80px;
+    padding: 30px 0 15px;
+    margin-top: 40px;
 }
 
 .footer-container {
@@ -348,45 +348,116 @@ ul {
 
 .footer-bottom {
     text-align: center;
-    margin-top: 60px;
-    padding-top: 25px;
+    margin-top: 15px;
+    padding-top: 15px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #94a3b8;
 }
 
-/* Feature Section (Reverted to Normal) */
+/* Premium Feature Cards Section */
 .feature-card {
-    padding: 20px 10px;
+    background: transparent;
+    padding: 60px 25px 45px;
+    margin-top: 45px;
+    margin-bottom: 25px;
+    border: 1px solid #d1d5db; /* Clean border like the reference */
+    border-radius: var(--radius-md); /* Added curve shape to the card */
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     transition: all 0.4s ease;
 }
 
 .feature-card:hover {
+    border-color: var(--primary-light);
     transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+}
+
+.feature-icon-outer {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: var(--light-bg); /* Match section bg to naturally cut the top border */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.feature-icon-inner {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.08); /* Very soft gold for the inner background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.feature-card:hover .feature-icon-inner {
+    transform: rotateY(180deg) scale(1.1); /* Flips 180 degrees backwards on hover */
+    background: var(--primary-color);
+    box-shadow: 0 8px 15px rgba(212, 175, 55, 0.3);
 }
 
 .feature-card i {
-    background: var(--gradient-primary);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: transform 0.3s ease;
+    color: var(--primary-color) !important;
+    transition: all 0.6s ease;
 }
 
 .feature-card:hover i {
-    transform: scale(1.1);
+    color: var(--white) !important;
+    transform: rotateY(180deg); /* Counter-rotate so the icon stays upright! */
 }
 
 .feature-card h3 {
-    margin-top: 15px;
-    margin-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 15px;
     color: var(--secondary-color);
-    font-weight: 600;
-    font-size: 1.3rem;
+    font-weight: 500;
+    font-size: 1.45rem;
+    font-family: 'Playfair Display', serif;
 }
 
 .feature-card p {
-    color: var(--text-color);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.feature-read-more {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    background: var(--primary-color); /* Changed to website's main golden color */
+    color: var(--white);
+    padding: 8px 22px;
+    border-radius: 20px; /* Optional: adds a slight curve to the button for better aesthetics */
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    z-index: 2;
+    border: 4px solid var(--light-bg); /* To cut the bottom border perfectly */
+}
+
+.feature-card:hover .feature-read-more {
+    background: var(--secondary-color); /* Turns Dark slate on hover */
+    transform: translate(-50%, 50%) translateY(-2px);
+    box-shadow: 0 4px 10px rgba(30, 41, 59, 0.3);
 }
 
 /* Features Grid */
