@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     EMAIL_USER: str | None = None
     EMAIL_PASSWORD: str | None = None
 
+    # Google Auth
+    GOOGLE_CLIENT_ID: str | None = None
+
     class Config:
         env_file = ".env"
         extra = "ignore"

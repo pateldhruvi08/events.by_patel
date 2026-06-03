@@ -1,3 +1,4 @@
+# pyrefly: ignore [missing-import]
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from typing import Optional
@@ -32,6 +33,20 @@ def verify_password_reset_token(token: str) -> Optional[str]:
     try:
         decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         if decoded_token.get("type") != "reset":
+            return None
+        return decoded_token.get("sub")
+    except JWTError:
+        return None
+
+def create_captcha_token(answer: str) -> str:
+    expire = datetime.utcnow() + timedelta(minutes=5)
+    to_encode = {"exp": expire, "sub": answer, "type": "captcha"}
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+
+def verify_captcha_token(token: str) -> Optional[str]:
+    try:
+        decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        if decoded_token.get("type") != "captcha":
             return None
         return decoded_token.get("sub")
     except JWTError:

@@ -12,7 +12,34 @@ document.addEventListener('DOMContentLoaded', () => {
             window.history.replaceState({}, document.title, window.location.pathname);
         }
     }
+    
+    // Load CAPTCHA if on login page
+    if (document.getElementById('captcha-question')) {
+        loadCaptcha();
+    }
 });
+
+async function loadCaptcha() {
+    try {
+        const timestamp = new Date().getTime();
+        const response = await fetch(`${API_URL}/auth/captcha?t=${timestamp}`, {
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById('captcha-question').textContent = data.question;
+            const tokenInput = document.getElementById('captcha-token');
+            if (tokenInput) tokenInput.value = data.token;
+            const answerInput = document.getElementById('captcha-answer');
+            if (answerInput) answerInput.value = ''; // clear previous answer
+        }
+    } catch (error) {
+        console.error('Failed to load CAPTCHA:', error);
+    }
+}
 
 async function updateNav() {
     const token = localStorage.getItem('token');
@@ -45,6 +72,20 @@ async function updateNav() {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+    
+    // Clear captcha state specifically
+    const tokenInput = document.getElementById('captcha-token');
+    const answerInput = document.getElementById('captcha-answer');
+    if (tokenInput) tokenInput.value = '';
+    if (answerInput) answerInput.value = '';
+    
+    // Attempt to clear browser cache if supported
+    if ('caches' in window) {
+        caches.keys().then(names => {
+            for (let name of names) caches.delete(name);
+        });
+    }
+
     window.location.href = 'index.html';
 }
 
@@ -73,12 +114,16 @@ if (loginForm) {
         e.preventDefault();
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
+        const captchaAnswer = document.getElementById('captcha-answer').value;
+        const captchaToken = document.getElementById('captcha-token').value;
         const errorMsg = document.getElementById('error-msg');
 
         try {
             const params = new URLSearchParams();
             params.append('username', username);
             params.append('password', password);
+            params.append('captcha_answer', captchaAnswer);
+            params.append('captcha_token', captchaToken);
 
             const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
@@ -110,6 +155,7 @@ if (loginForm) {
                 }
                 errorMsg.textContent = message;
                 errorMsg.style.display = 'block';
+                loadCaptcha(); // Reload CAPTCHA on failure
             }
         } catch (error) {
             console.error('Login Error:', error);
@@ -161,4 +207,38 @@ if (registerForm) {
             errorMsg.style.display = 'block';
         }
     });
+}
+
+// Real Google OAuth Handler
+window.handleGoogleLogin = async function(response) {
+    const errorMsg = document.getElementById('error-msg');
+    try {
+        const res = await fetch(`${API_URL}/auth/google`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ token: response.credential })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            localStorage.setItem('token', data.access_token);
+            localStorage.setItem('role', data.role);
+
+            if (data.role === 'admin') {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'dashboard.html';
+            }
+        } else {
+            const data = await res.json();
+            errorMsg.textContent = 'Google Login failed: ' + (data.detail || 'Unknown error. Check backend Client ID config.');
+            errorMsg.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Google Login Error:', error);
+        errorMsg.textContent = 'Server unreachable. Ensure backend is running.';
+        errorMsg.style.display = 'block';
+    }
 }

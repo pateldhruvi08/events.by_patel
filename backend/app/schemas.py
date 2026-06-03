@@ -1,3 +1,4 @@
+# pyrefly: ignore [missing-import]
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
 from datetime import datetime
@@ -42,6 +43,13 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+class CaptchaResponse(BaseModel):
+    question: str
+    token: str
+
+class GoogleAuthRequest(BaseModel):
+    token: str
 
 # Password Schemas
 class ForgotPasswordRequest(BaseModel):
