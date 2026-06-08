@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightboxNext = lightbox.querySelector('.lightbox-next');
 
     // Likes management
-    let likedPhotos = [];
+    let likedPhotos = JSON.parse(localStorage.getItem('guestLikedPhotos')) || [];
     const token = localStorage.getItem('token');
 
     // Function to render images
@@ -127,15 +127,26 @@ document.addEventListener('DOMContentLoaded', () => {
         // Fetch likes if logged in
         if (token) {
             try {
-                likedPhotos = await Api.get('/likes/me', true);
+                const serverLikes = await Api.get('/likes/me', true);
+                // Keep server source of truth if logged in
+                likedPhotos = serverLikes;
             } catch (e) {
                 console.error("Failed to load likes from server", e);
             }
         }
 
-        currentImages = category === 'all'
-            ? galleryImages
-            : galleryImages.filter(img => img.category === category);
+        if (category === 'liked') {
+            currentImages = galleryImages.filter(img => likedPhotos.includes(img.src));
+            if (currentImages.length === 0) {
+                galleryGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #666; font-size: 1.1rem; margin-top: 40px; height: 300px;">No liked photos yet. Click the heart icon on any photo to save it here!</p>';
+                galleryGrid.style.opacity = '1';
+                return;
+            }
+        } else {
+            currentImages = category === 'all'
+                ? galleryImages
+                : galleryImages.filter(img => img.category === category);
+        }
 
         currentImages.forEach((img, index) => {
             const item = document.createElement('div');
@@ -186,16 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function toggleLike(src, btn) {
-        if (!token) {
-            alert("Please login or create an account to save your favorite photos to your profile!");
-            // Still allow local toggling for demo
-            if (likedPhotos.includes(src)) {
-                likedPhotos = likedPhotos.filter(s => s !== src);
-            } else {
-                likedPhotos.push(src);
-            }
-            localStorage.setItem('liked_photos', JSON.stringify(likedPhotos));
-        } else {
+        if (token) {
             try {
                 const res = await Api.post('/likes/toggle', { image_url: src }, true);
                 if (!res.ok) throw new Error("Failed to toggle like");
@@ -209,6 +211,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Failed to save like.");
                 return;
             }
+        } else {
+            // Guest mode: save to localStorage
+            if (likedPhotos.includes(src)) {
+                likedPhotos = likedPhotos.filter(s => s !== src);
+            } else {
+                likedPhotos.push(src);
+            }
+            localStorage.setItem('guestLikedPhotos', JSON.stringify(likedPhotos));
         }
 
         const icon = btn.querySelector('i');
@@ -220,6 +230,18 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.classList.remove('liked');
             icon.classList.remove('fas');
             icon.classList.add('far');
+            
+            // If we are currently in the 'liked' tab, hide the image immediately
+            const activeBtn = document.querySelector('.gallery-filter-btn.active');
+            if (activeBtn && activeBtn.getAttribute('data-filter') === 'liked') {
+                const item = btn.closest('.gallery-filter-item');
+                if (item) {
+                    item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    item.style.opacity = '0';
+                    item.style.transform = 'scale(0.9)';
+                    setTimeout(() => item.style.display = 'none', 300);
+                }
+            }
         }
     }
 

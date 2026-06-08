@@ -3,19 +3,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupModal();
 });
 
+const FALLBACK_SERVICES = [
+    { id: 1, name: "Wedding Planning", description: "Complete wedding decoration including floral arrangements, stage setup, and lighting.", price: 5000.0, category: "Wedding" },
+    { id: 2, name: "Corporate Events", description: "Professional setup for corporate events, including podiums, backdrops, and seating.", price: 2500.0, category: "Corporate" },
+    { id: 3, name: "Birthday Decoration", description: "Colorful and fun decorations for birthday parties of all ages.", price: 800.0, category: "Birthday" },
+    { id: 4, name: "Baby Shower", description: "Celebrate the arrival of your little one with themed decorations and games.", price: 1200.0, category: "Baby Shower" },
+    { id: 5, name: "Anniversary", description: "Timeless and romantic decorations for your special milestone.", price: 1500.0, category: "Anniversary" },
+    { id: 6, name: "Home Decor", description: "Add festive charm to your home for pujas, festivals, and gatherings.", price: 2000.0, category: "Home Decor" }
+];
+
 async function fetchServices() {
     const grid = document.getElementById('services-grid');
-    const token = localStorage.getItem('token');
+    if (!grid) return;
 
     grid.innerHTML = '<p style="text-align:center; width: 100%;">Loading services...</p>';
 
+    let services = [];
     try {
-        const services = await Api.get('/services/');
+        // Fetch from backend with a 4-second timeout for serverless cold starts
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 4000));
+        services = await Promise.race([Api.get('/services/'), timeoutPromise]);
+    } catch (error) {
+        console.warn('Backend fetch failed or timed out. Using fallback services.', error);
+    }
 
-        if (!services || services.length === 0) {
-            grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center;"><p>No services found.</p></div>';
-            return;
-        }
+    if (!services || services.length === 0) {
+        services = FALLBACK_SERVICES;
+    }
 
         function getServiceImage(name, category) {
             const lowerName = (name + ' ' + category).toLowerCase();
@@ -45,23 +59,13 @@ async function fetchServices() {
             `;
         }).join('');
 
-    } catch (error) {
-        console.error('Error fetching services:', error);
-        grid.innerHTML = '<p>Error loading services. Please populate the database.</p>';
-    }
+
 }
 
 const modal = document.getElementById('booking-modal');
 const bookingForm = document.getElementById('booking-form');
 
 function openBookingModal(serviceId, serviceName) {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        alert('Please login to book a service.');
-        window.location.href = 'login.html';
-        return;
-    }
-
     document.getElementById('service-id').value = serviceId;
     document.getElementById('service-name').value = serviceName;
     modal.style.display = 'flex';
@@ -82,37 +86,76 @@ function setupModal() {
     bookingForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const serviceId = document.getElementById('service-id').value;
-        const eventDate = document.getElementById('event-date').value;
-        const eventTime = document.getElementById('event-time').value;
-        const eventLocation = document.getElementById('event-location').value;
-        const eventPackage = document.getElementById('event-package').value;
-        const specialRequests = document.getElementById('special-requests').value;
+        // 1. Check if user is logged in
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Please log in to book a service.');
+            window.location.href = 'login.html';
+            return;
+        }
 
-        // Construct event_date string (ISO format for FastAPI)
-        const combinedDateTime = `${eventDate}T${eventTime}:00`;
+        const submitBtn = bookingForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerText;
+        submitBtn.innerText = 'Processing...';
+        submitBtn.disabled = true;
 
         try {
-            const response = await Api.post('/bookings/', {
+            const serviceId = document.getElementById('service-id').value;
+            const serviceName = document.getElementById('service-name').value;
+            const customerName = document.getElementById('customer-name').value;
+            const customerPhone = document.getElementById('customer-phone').value;
+            
+            const eventDate = document.getElementById('event-date').value;
+            const eventTime = document.getElementById('event-time').value;
+            const eventLocation = document.getElementById('event-location').value;
+            const eventPackage = document.getElementById('event-package').value;
+            const specialRequests = document.getElementById('special-requests').value;
+
+            // Combine date and time for backend datetime
+            const eventDateTime = new Date(`${eventDate}T${eventTime || '00:00'}`).toISOString();
+
+            // 2. Store booking in database via API
+            await Api.post('/bookings/', {
                 service_id: parseInt(serviceId),
-                event_date: combinedDateTime,
+                event_date: eventDateTime,
                 time: eventTime,
                 location: eventLocation,
                 package: eventPackage,
                 special_requests: specialRequests
-            }, true); // true = requireAuth
+            }, true);
 
-            if (response.ok) {
-                alert('Booking Confirmed! You can view it in your dashboard.');
-                closeModal();
-                bookingForm.reset();
-            } else {
-                const data = await response.json();
-                alert('Booking Failed: ' + (data.detail || 'Unknown error'));
+            // 3. Construct enriched WhatsApp Message
+            let message = `Hello! I would like to book a service with Event's By Patel.\n\n`;
+            message += `*Customer Details:*\n`;
+            message += `- Name: ${customerName}\n`;
+            message += `- Phone: ${customerPhone}\n\n`;
+            
+            message += `*Booking Details:*\n`;
+            message += `- Service: ${serviceName}\n`;
+            message += `- Date: ${eventDate}\n`;
+            message += `- Time: ${eventTime}\n`;
+            message += `- Location: ${eventLocation}\n`;
+            message += `- Package: ${eventPackage}\n`;
+            if (specialRequests) {
+                message += `- Special Requests: ${specialRequests}\n`;
             }
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappNumber = "916351985104"; // Admin's WhatsApp number
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            // Redirect to WhatsApp
+            window.open(whatsappUrl, '_blank');
+
+            alert('Booking stored successfully! Redirecting you to WhatsApp to complete your booking.');
+            closeModal();
+            bookingForm.reset();
         } catch (error) {
-            alert('An error occurred during booking.');
-            console.error(error);
+            console.error('Booking failed:', error);
+            alert('Failed to process booking. Please try again or contact support.');
+        } finally {
+            submitBtn.innerText = originalBtnText;
+            submitBtn.disabled = false;
         }
     });
 }

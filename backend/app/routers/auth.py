@@ -8,8 +8,6 @@ from datetime import timedelta
 import random
 from .. import database, models, utils, schemas
 from ..config import get_settings
-from google.oauth2 import id_token
-from google.auth.transport import requests as google_requests
 
 router = APIRouter(
     prefix="/auth",
@@ -18,17 +16,6 @@ router = APIRouter(
 
 settings = get_settings()
 
-@router.get("/captcha", response_model=schemas.CaptchaResponse)
-def get_captcha(response: Response):
-    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
-    num1 = random.randint(1, 9)
-    num2 = random.randint(1, 9)
-    question = f"{num1} + {num2} ="
-    answer = str(num1 + num2)
-    token = utils.create_captcha_token(answer)
-    return {"question": question, "token": token}
 
 @router.post("/register", response_model=schemas.UserOut)
 def register(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
@@ -65,20 +52,8 @@ def register(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
 @router.post("/login", response_model=schemas.Token)
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    captcha_token: str = Form(None),
-    captcha_answer: str = Form(None),
     db: Session = Depends(database.get_db)
 ):
-    if not captcha_token or not captcha_answer:
-        raise HTTPException(status_code=400, detail="CAPTCHA is required")
-        
-    correct_answer = utils.verify_captcha_token(captcha_token)
-    if not correct_answer:
-        raise HTTPException(status_code=400, detail="Invalid or expired CAPTCHA")
-        
-    if captcha_answer.strip() != correct_answer:
-        raise HTTPException(status_code=400, detail="Incorrect CAPTCHA answer")
-
     user = db.query(models.User).filter(models.User.username == form_data.username).first()
     if not user or not utils.verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
@@ -106,58 +81,7 @@ def login(
     role = "admin" if user.is_superuser else "customer"
     return {"access_token": access_token, "token_type": "bearer", "role": role}
 
-@router.post("/google", response_model=schemas.Token)
-def google_auth(request_data: schemas.GoogleAuthRequest, db: Session = Depends(database.get_db)):
-    if not settings.GOOGLE_CLIENT_ID or settings.GOOGLE_CLIENT_ID == "your-client-id-here.apps.googleusercontent.com":
-        raise HTTPException(status_code=400, detail="Google Client ID is not configured on the backend.")
-        
-    try:
-        # Verify token with Google
-        idinfo = id_token.verify_oauth2_token(
-            request_data.token, 
-            google_requests.Request(), 
-            settings.GOOGLE_CLIENT_ID
-        )
-        
-        email = idinfo['email']
-        username = email.split('@')[0]
-        
-        user = db.query(models.User).filter(models.User.email == email).first()
-        if not user:
-            # Auto-register
-            import secrets
-            random_password = secrets.token_urlsafe(16)
-            hashed_password = utils.get_password_hash(random_password)
-            
-            # Ensure unique username
-            base_username = username
-            counter = 1
-            while db.query(models.User).filter(models.User.username == username).first():
-                username = f"{base_username}{counter}"
-                counter += 1
-                
-            user = models.User(
-                email=email,
-                username=username,
-                hashed_password=hashed_password,
-                notification_email=True,
-                is_active=True,
-                is_superuser=False
-            )
-            db.add(user)
-            db.commit()
-            db.refresh(user)
-            
-        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-        access_token = utils.create_access_token(
-            data={"sub": user.username}, expires_delta=access_token_expires
-        )
-        role = "admin" if user.is_superuser else "customer"
-        return {"access_token": access_token, "token_type": "bearer", "role": role}
-        
-    except ValueError:
-        # Invalid token
-        raise HTTPException(status_code=401, detail="Invalid Google token")
+
 
 from ..dependencies import get_current_user
 

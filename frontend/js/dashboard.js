@@ -10,7 +10,7 @@ function checkAuth() {
     const role = localStorage.getItem('role');
 
     if (!token) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
         return;
     }
 

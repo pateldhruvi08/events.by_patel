@@ -36,7 +36,7 @@
     gap: 35px;
     align-items: center;
     flex: 2;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .nav-links a {
@@ -283,4 +283,61 @@
         font-size: 0.85rem;
         margin-left: 5px;
     }
+}
+
+/* Save Contact Header Button */
+.contact-btn.header-save-contact-btn {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    background: #25D366 !important;
+    color: white !important;
+    padding: 8px 18px !important;
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 0.95rem !important;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.navbar.navbar-transparent .contact-btn.header-save-contact-btn {
+    color: white !important;
+    text-shadow: none !important;
+}
+
+.contact-btn.header-save-contact-btn::after {
+    display: none !important;
+}
+
+.contact-btn.header-save-contact-btn:hover {
+    background: #1EBE5D !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+}
+
+.contact-btn.header-save-contact-btn i {
+    font-size: 1.15rem;
+}
+
+@media (max-width: 768px) {
+    .contact-btn.header-save-contact-btn {
+        margin-left: 0;
+        margin-top: 5px;
+        padding: 6px 14px !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+/* Save Contact Modal Animations */
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.contact-modal-content {
+    animation: modalFadeIn 0.3s ease-out forwards;
 }

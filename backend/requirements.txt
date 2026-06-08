@@ -11,4 +11,3 @@ bcrypt==3.2.0
 email-validator
 jinja2
 python-dotenv
-google-auth
