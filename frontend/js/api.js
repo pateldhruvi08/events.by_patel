@@ -209,8 +209,32 @@ function initSaveContactModal() {
 }
 
 // Run initialization safely
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSaveContactModal);
-} else {
+function initializeApp() {
     initSaveContactModal();
+    initMobileMenu();
+}
+
+function initMobileMenu() {
+    const mobileMenuBtn = document.getElementById('mobile-menu');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    initializeApp();
 }

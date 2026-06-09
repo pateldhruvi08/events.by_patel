@@ -16,6 +16,9 @@
         <div class="container">
             <a href="index.html" class="logo"><img src="images/logo.jpeg" alt="Event's by Patel" class="logo-img"> <span
                     class="logo-text">Event's By Patel</span></a>
+            <div class="menu-toggle" id="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
             <div class="nav-links">
                 <a href="index.html">Home</a>
                 <a href="services.html">Services</a>
@@ -30,35 +33,47 @@
     <div class="container section" style="padding-top: 140px;">
         <h2 class="section-title">Get in Touch</h2>
         <div class="contact-wrapper" style="display: flex; flex-wrap: wrap; gap: 50px; justify-content: center;">
-            <div class="contact-info" style="flex: 1; min-width: 250px;">
+            <style>
+                .contact-info-text { text-align: left; }
+                .contact-info-row { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 20px; }
+                .contact-form-heading { text-align: left; margin-bottom: 20px; }
+                
+                @media (max-width: 768px) {
+                    .contact-info-text { text-align: center; }
+                    .contact-info-row { justify-content: center; }
+                    .contact-form-heading { text-align: center; }
+                }
+            </style>
+            
+            <div class="contact-info contact-info-text" style="flex: 1; min-width: 250px;">
                 <h3>Contact Information</h3>
                 <p style="margin-bottom: 20px;">Feel free to reach out to us for any inquiries or bookings.</p>
 
-                <div style="display: flex; align-items: center; margin-bottom: 20px; text-align: left;">
+                <div class="contact-info-row">
                     <i class="fas fa-map-marker-alt"
                         style="color: var(--primary-color); width: 30px; text-align: center; margin-right: 15px; font-size: 1.25rem;"></i>
                     <span>Arise flours Gota</span>
                 </div>
-                <div style="display: flex; align-items: center; margin-bottom: 20px; text-align: left;">
+                <div class="contact-info-row">
                     <i class="fas fa-phone-alt"
                         style="color: var(--primary-color); width: 30px; text-align: center; margin-right: 15px; font-size: 1.25rem;"></i>
                     <a href="tel:+916351985104">+91 6351985104</a>
                 </div>
-                <div style="display: flex; align-items: center; margin-bottom: 20px; text-align: left;">
+                <div class="contact-info-row">
                     <i class="fas fa-envelope"
                         style="color: var(--primary-color); width: 30px; text-align: center; margin-right: 15px; font-size: 1.25rem;"></i>
                     <a href="mailto:eventsbypatel88@gmail.com"
                         style="word-break: break-all;">eventsbypatel88@gmail.com</a>
                 </div>
-                <div style="display: flex; align-items: center; margin-bottom: 20px; text-align: left;">
+                <div class="contact-info-row">
                     <i class="fab fa-instagram"
                         style="color: var(--primary-color); width: 30px; text-align: center; margin-right: 15px; font-size: 1.25rem;"></i>
                     <a href="https://instagram.com/Event’s.by_patel" target="_blank">Event’s.by_patel</a>
                 </div>
 
-                <div style="margin-top: 35px; text-align: left;">
+                <div style="margin-top: 35px;">
                     <h3 style="margin-bottom: 15px;">Owner</h3>
-                    <div style="display: flex; align-items: center;">
+                    <div class="contact-info-row">
                         <i class="fas fa-user-circle"
                             style="color: var(--primary-color); width: 30px; text-align: center; margin-right: 15px; font-size: 1.35rem;"></i>
                         <span style="font-weight: 500;">Mahi Patel</span>
@@ -68,7 +83,7 @@
 
             <div class="contact-form"
                 style="flex: 1; min-width: 250px; padding: 25px; background: #fff; box-shadow: var(--shadow-md); border-radius: var(--radius-md);">
-                <h3>Send us a message</h3>
+                <h3 class="contact-form-heading">Send us a message</h3>
                 <form action="https://api.web3forms.com/submit" method="POST">
                     <input type="hidden" name="access_key" value="597f13e3-a928-4c0c-a952-5465b1e76b1b">
                     <div class="form-group">
