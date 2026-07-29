@@ -1,4 +1,6 @@
+# pyrefly: ignore [missing-import]
 from fastapi import APIRouter, Depends, HTTPException, status
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 from typing import List
 from .. import database, models, schemas
@@ -75,6 +77,7 @@ def update_booking_status(booking_id: int, status_update: schemas.BookingUpdate,
     db.refresh(booking)
     return booking
 
+# pyrefly: ignore [missing-import]
 from fastapi import File, UploadFile
 import shutil
 import os
@@ -104,3 +107,20 @@ async def upload_image(file: UploadFile = File(...), current_user: models.User =
         return {"url": url}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/stats")
+def get_admin_stats(db: Session = Depends(database.get_db), current_user: models.User = Depends(get_current_admin_user)):
+    total_users = db.query(models.User).count()
+    total_bookings = db.query(models.Booking).count()
+    total_services = db.query(models.Service).count()
+    total_images = db.query(models.Gallery).count()
+    
+    recent_uploads = db.query(models.Gallery).order_by(models.Gallery.id.desc()).limit(5).all()
+    
+    return {
+        "total_users": total_users,
+        "total_bookings": total_bookings,
+        "total_services": total_services,
+        "total_images": total_images,
+        "recent_uploads": recent_uploads
+    }

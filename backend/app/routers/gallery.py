@@ -31,3 +31,16 @@ def delete_gallery_item(item_id: int, db: Session = Depends(database.get_db), cu
     db.delete(item)
     db.commit()
     return None
+
+@router.put("/{item_id}", response_model=schemas.GalleryOut)
+def update_gallery_item(item_id: int, item_update: schemas.GalleryCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(get_current_admin_user)):
+    item = db.query(models.Gallery).filter(models.Gallery.id == item_id).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Gallery item not found")
+    
+    item.title = item_update.title
+    item.image_url = item_update.image_url
+    
+    db.commit()
+    db.refresh(item)
+    return item
