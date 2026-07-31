@@ -18,7 +18,10 @@ app = FastAPI(title="Event Management API")
 # We mount /static to backend/static
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
-os.makedirs(STATIC_DIR, exist_ok=True) # Ensure it exists
+try:
+    os.makedirs(STATIC_DIR, exist_ok=True) # Ensure it exists
+except Exception:
+    pass
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
@@ -30,19 +33,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)
-app.include_router(users.router)
-app.include_router(services.router)
-app.include_router(bookings.router)
-app.include_router(admin.router)
-app.include_router(gallery.router)
-app.include_router(contact.router)
-app.include_router(likes.router)
+app.include_router(auth.router, prefix="/api")
+app.include_router(users.router, prefix="/api")
+app.include_router(services.router, prefix="/api")
+app.include_router(bookings.router, prefix="/api")
+app.include_router(admin.router, prefix="/api")
+app.include_router(gallery.router, prefix="/api")
+app.include_router(contact.router, prefix="/api")
+app.include_router(likes.router, prefix="/api")
 
-@app.get("/")
+@app.get("/api/")
 def read_root():
     return {"message": "Welcome to Event Management System API"}
-
 @app.on_event("startup")
 def populate_default_services():
     from .database import SessionLocal
@@ -94,7 +96,7 @@ def populate_default_services():
     finally:
         db.close()
 
-@app.get("/status")
+@app.get("/api/status")
 def get_status():
     from .database import engine
     return {"database_connected": True, "database_dialect": engine.dialect.name}

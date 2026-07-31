@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+# Database
+*.sqlite3
+*.db
+event_management.db
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+
+# Vercel
+.vercel/

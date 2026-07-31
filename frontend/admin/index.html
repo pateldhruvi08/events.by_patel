@@ -10,9 +10,12 @@
     <link rel="stylesheet" href="../css/dashboard.css?v=42.0">
 
     <script>
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:' || window.location.hostname === '';
+        const CURRENT_API_URL = isLocalhost ? 'http://localhost:8000/api' : '/api';
+        
         // Auto-login to bypass login screen
         if (!localStorage.getItem('token') || localStorage.getItem('role') !== 'admin') {
-            fetch('http://localhost:8000/auth/login', {
+            fetch(`${CURRENT_API_URL}/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({ username: 'mahi patel', password: 'admin123' })

@@ -1,6 +1,6 @@
-// Update this to your deployed Render/Railway backend URL
+// Update this to your deployed Render/Railway backend URL or leave for Vercel
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:' || window.location.hostname === '';
-const API_URL = isLocalhost ? 'http://localhost:8000' : 'https://events-by-patel.onrender.com';
+const API_URL = isLocalhost ? 'http://localhost:8000/api' : '/api';
 
 class Api {
     static async handleAuthError(response) {
