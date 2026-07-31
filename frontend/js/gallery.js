@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         grid.innerHTML = items.map(item => `
             <div class="gallery-item" style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-                <img src="${item.image_url}" alt="${item.title || 'Event'}" style="width: 100%; height: 250px; object-fit: cover; display: block;">
+                <img src="${item.image_url ? (item.image_url.startsWith('http') ? item.image_url : (item.image_url.startsWith('static/') ? API_URL + '/' + item.image_url : item.image_url)) : ''}" alt="${item.title || 'Event'}" style="width: 100%; height: 250px; object-fit: cover; display: block;">
                 <div style="padding: 15px; text-align: center;">
                     <h3>${item.title || 'Event'}</h3>
                 </div>

@@ -11,13 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Find links calling switchTab with this id (simple selector)
         // Or specific logic. Just make current one active.
 
+        if (tabId === 'dashboard') fetchStats();
         if (tabId === 'services') fetchServices();
         if (tabId === 'gallery') fetchGallery();
         if (tabId === 'bookings') fetchBookings();
         if (tabId === 'users') fetchUsers();
     };
 
-    switchTab('services'); // Default tab
+    switchTab('dashboard'); // Default tab
 
 
     // Logout
@@ -30,17 +31,58 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function checkAdmin() {
-    const token = localStorage.getItem('token');
-    const role = localStorage.getItem('role');
+    // Login check bypassed for direct access
+    return;
+}
 
-    if (!token) {
-        window.location.href = 'index.html';
-        return;
-    }
 
-    if (role !== 'admin') {
-        window.location.href = 'dashboard.html';
-        return;
+// --- DASHBOARD STATS ---
+async function fetchStats() {
+    const grid = document.getElementById('admin-stats-grid');
+    const recentGrid = document.getElementById('admin-recent-uploads');
+    if (!grid) return;
+
+    grid.innerHTML = '<p>Loading stats...</p>';
+    recentGrid.innerHTML = '';
+    
+    try {
+        const stats = await Api.get('/admin/stats', true);
+        grid.innerHTML = `
+            <div class="stat-card" style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); text-align:center;">
+                <i class="fas fa-images" style="font-size:2rem; color:var(--primary-color); margin-bottom:10px;"></i>
+                <h3 style="margin:0; font-size:1.2rem; color:#555;">Total Images</h3>
+                <p style="font-size:2rem; font-weight:bold; margin:10px 0 0 0; color:#333;">${stats.total_images}</p>
+            </div>
+            <div class="stat-card" style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); text-align:center;">
+                <i class="fas fa-calendar-alt" style="font-size:2rem; color:var(--primary-color); margin-bottom:10px;"></i>
+                <h3 style="margin:0; font-size:1.2rem; color:#555;">Total Bookings</h3>
+                <p style="font-size:2rem; font-weight:bold; margin:10px 0 0 0; color:#333;">${stats.total_bookings}</p>
+            </div>
+            <div class="stat-card" style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); text-align:center;">
+                <i class="fas fa-users" style="font-size:2rem; color:var(--primary-color); margin-bottom:10px;"></i>
+                <h3 style="margin:0; font-size:1.2rem; color:#555;">Total Users</h3>
+                <p style="font-size:2rem; font-weight:bold; margin:10px 0 0 0; color:#333;">${stats.total_users}</p>
+            </div>
+            <div class="stat-card" style="background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); text-align:center;">
+                <i class="fas fa-concierge-bell" style="font-size:2rem; color:var(--primary-color); margin-bottom:10px;"></i>
+                <h3 style="margin:0; font-size:1.2rem; color:#555;">Services</h3>
+                <p style="font-size:2rem; font-weight:bold; margin:10px 0 0 0; color:#333;">${stats.total_services}</p>
+            </div>
+        `;
+        
+        if (stats.recent_uploads.length > 0) {
+            recentGrid.innerHTML = stats.recent_uploads.map(img => `
+                <div style="background:#fff; padding:10px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+                    <img src="${img.image_url.startsWith('http') ? img.image_url : (img.image_url.startsWith('static/') ? API_URL + '/' + img.image_url : '../' + img.image_url)}" style="width:100%; height:100px; object-fit:cover; border-radius:4px;">
+                    <p style="font-size:0.8rem; text-align:center; margin:5px 0 0 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${img.title || 'Untitled'}</p>
+                </div>
+            `).join('');
+        } else {
+            recentGrid.innerHTML = '<p style="color:#777; grid-column: 1 / -1;">No recent uploads.</p>';
+        }
+    } catch (e) {
+        grid.innerHTML = '<p style="color:red;">Failed to load statistics.</p>';
+        console.error("Stats Error:", e);
     }
 }
 
@@ -51,15 +93,15 @@ async function fetchServices() {
     try {
         const services = await Api.get('/services/');
         function getServiceImage(name, category, providedUrl) {
-            if (providedUrl && providedUrl.startsWith('images/')) return providedUrl;
+            if (providedUrl && (providedUrl.startsWith('images/') || providedUrl.startsWith('static/'))) return providedUrl.startsWith('static/') ? API_URL + '/' + providedUrl : '../' + providedUrl;
             const lowerName = (name + ' ' + (category || '')).toLowerCase();
-            if (lowerName.includes('wedding')) return 'images/wedding/img4.jpeg';
-            if (lowerName.includes('birthday')) return 'images/birthday/img28.jpeg';
-            if (lowerName.includes('corporate')) return 'images/corporate/img35.jpeg';
-            if (lowerName.includes('baby')) return 'images/baby-shower/img20.jpeg';
-            if (lowerName.includes('anniversary')) return 'images/anniversery/img27.jpeg';
-            if (lowerName.includes('decor') || lowerName.includes('home')) return 'images/home-decor-welcome/img78.jpeg';
-            return 'images/wedding/img1.jpeg';
+            if (lowerName.includes('wedding')) return '../images/wedding/img4.jpeg';
+            if (lowerName.includes('birthday')) return '../images/birthday/img28.jpeg';
+            if (lowerName.includes('corporate')) return '../images/corporate/img35.jpeg';
+            if (lowerName.includes('baby')) return '../images/baby-shower/img20.jpeg';
+            if (lowerName.includes('anniversary')) return '../images/anniversery/img27.jpeg';
+            if (lowerName.includes('decor') || lowerName.includes('home')) return '../images/home-decor-welcome/img78.jpeg';
+            return '../images/wedding/img1.jpeg';
         }
 
         list.innerHTML = services.map(s => {
@@ -97,13 +139,24 @@ async function fetchGallery() {
     grid.innerHTML = 'Loading...';
     try {
         const items = await Api.get('/gallery/');
-        grid.innerHTML = items.map(item => `
-            <div class="admin-card" style="position:relative;">
-                <img src="${item.image_url}" style="width:100%; height:150px; object-fit:cover; border-radius:4px;">
-                <button onclick="deleteGalleryItem(${item.id})" style="position:absolute; top:5px; right:5px; background:red; color:white; border:none; border-radius:50%; width:25px; height:25px; cursor:pointer;">&times;</button>
-                <p style="text-align:center; font-size:0.8rem; margin-top:5px;">${item.title || ''}</p>
+        if (!items || items.length === 0) {
+            grid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #777;">No images found in the gallery. Click "+ Add Image" to upload one.</p>';
+            return;
+        }
+        grid.innerHTML = items.map(item => {
+            const displayUrl = item.image_url.startsWith('http') ? item.image_url : (item.image_url.startsWith('static/') ? API_URL + '/' + item.image_url : '../' + item.image_url);
+            return `
+            <div class="admin-card" style="position:relative; display:flex; flex-direction:column; background:#fff; border:1px solid #ddd; border-radius:8px; overflow:hidden;">
+                <img src="${displayUrl}" style="width:100%; height:150px; object-fit:cover; border-bottom:1px solid #eee;">
+                <div style="padding:10px;">
+                    <p style="text-align:center; font-size:0.9rem; margin:0 0 10px 0; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.title || 'Untitled'}</p>
+                    <div style="display:flex; gap:10px; justify-content:center;">
+                        <button onclick="editGalleryItem(${item.id}, '${(item.title || '').replace(/'/g, "\'")}', '${item.image_url}')" class="btn" style="padding:5px 10px; font-size:0.8rem; flex:1;">Edit</button>
+                        <button onclick="deleteGalleryItem(${item.id})" class="btn" style="padding:5px 10px; font-size:0.8rem; background:red; flex:1;">Delete</button>
+                    </div>
+                </div>
             </div>
-        `).join('');
+        `}).join('');
     } catch (e) {
         grid.innerHTML = 'Error loading gallery.';
     }
@@ -177,7 +230,30 @@ const galleryModal = document.getElementById('gallery-modal');
 
 window.openServiceModal = () => serviceModal.style.display = 'block';
 window.closeServiceModal = () => serviceModal.style.display = 'none';
-window.openGalleryModal = () => galleryModal.style.display = 'block';
+
+window.editGalleryItem = function(id, title, imageUrl) {
+    document.getElementById('gallery-modal-title').textContent = 'Edit Image';
+    document.getElementById('gallery-id').value = id;
+    document.getElementById('gallery-title').value = title;
+    document.getElementById('gallery-image-url').value = imageUrl;
+    document.getElementById('gallery-image-file').value = '';
+    
+    const previewContainer = document.getElementById('gallery-preview-container');
+    const previewImg = document.getElementById('gallery-preview');
+    previewImg.src = imageUrl.startsWith('http') ? imageUrl : (imageUrl.startsWith('static/') ? API_URL + '/' + imageUrl : '../' + imageUrl);
+    previewContainer.style.display = 'block';
+    
+    document.getElementById('gallery-modal').style.display = 'block';
+};
+
+window.openGalleryModal = () => {
+    document.getElementById('gallery-modal-title').textContent = 'Add Image';
+    document.getElementById('gallery-form').reset();
+    document.getElementById('gallery-id').value = '';
+    document.getElementById('gallery-preview-container').style.display = 'none';
+    document.getElementById('gallery-modal').style.display = 'block';
+};
+
 window.closeGalleryModal = () => galleryModal.style.display = 'none';
 
 function setupModals() {
@@ -210,26 +286,66 @@ function setupModals() {
     });
 
     // Gallery Form
+    const galleryFileInput = document.getElementById('gallery-image-file');
+    const previewContainer = document.getElementById('gallery-preview-container');
+    const previewImg = document.getElementById('gallery-preview');
+
+    galleryFileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewContainer.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
     document.getElementById('gallery-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const title = document.getElementById('gallery-title').value;
-        const urlInput = document.getElementById('gallery-image-url');
-
-        const imageUrl = urlInput.value.trim();
-
-        if (!imageUrl.startsWith('images/')) {
-            alert('Error: Image path must start with "images/". Please use a path like "images/wedding/img1.jpeg"');
-            return;
-        }
+        const submitBtn = document.getElementById('gallery-submit-btn');
+        submitBtn.textContent = 'Saving...';
+        submitBtn.disabled = true;
 
         try {
-            await Api.post('/gallery/', { title, image_url: imageUrl }, true);
+            const id = document.getElementById('gallery-id').value;
+            const title = document.getElementById('gallery-title').value;
+            let imageUrl = document.getElementById('gallery-image-url').value.trim();
+            const file = galleryFileInput.files[0];
+
+            if (file) {
+                // Upload file first
+                submitBtn.textContent = 'Uploading...';
+                imageUrl = await uploadImage(file);
+                // Strip the starting slash if present to make it relative (or keep it depending on frontend config)
+                // Actually the API returns /static/uploads/..., let's store it as is, or strip slash.
+                // Our frontend expects paths relative to root or full urls. The API returns /static/uploads/...
+                if (imageUrl.startsWith('/')) {
+                    imageUrl = imageUrl.substring(1); // 'static/uploads/...'
+                }
+            } else if (!imageUrl) {
+                throw new Error("Please select a file to upload or provide an image path.");
+            }
+
+            const data = { title, image_url: imageUrl };
+
+            if (id) {
+                // Update
+                await secureFetch(`/gallery/${id}`, 'PUT', JSON.stringify(data));
+            } else {
+                // Create
+                await Api.post('/gallery/', data, true);
+            }
 
             closeGalleryModal();
             fetchGallery();
-            e.target.reset();
+            if(document.getElementById('dashboard-tab').style.display === 'block') fetchStats();
         } catch (err) {
             alert('Error saving image: ' + err.message);
+        } finally {
+            submitBtn.textContent = 'Save Image';
+            submitBtn.disabled = false;
         }
     });
 

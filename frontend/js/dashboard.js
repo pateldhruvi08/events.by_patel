@@ -119,7 +119,7 @@ async function fetchUserLikes() {
 
         list.innerHTML = likes.map(url => `
             <div style="position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); height: 180px;">
-                <img src="${url}" style="width: 100%; height: 100%; object-fit: cover;" alt="Liked Image">
+                <img src="${url ? (url.startsWith('http') ? url : (url.startsWith('static/') ? API_URL + '/' + url : url)) : ''}" style="width: 100%; height: 100%; object-fit: cover;" alt="Liked Image">
                 <button onclick="unlikeImage('${url}')" style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; color: #e74c3c; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" title="Unlike Image">
                     <i class="fas fa-heart"></i>
                 </button>

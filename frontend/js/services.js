@@ -31,7 +31,12 @@ async function fetchServices() {
         services = FALLBACK_SERVICES;
     }
 
-        function getServiceImage(name, category) {
+        function getServiceImage(service) {
+            if (service.image_url) {
+                return service.image_url.startsWith('http') ? service.image_url : (service.image_url.startsWith('static/') ? API_URL + '/' + service.image_url : service.image_url);
+            }
+            const name = service.name || '';
+            const category = service.category || '';
             const lowerName = (name + ' ' + category).toLowerCase();
             if (lowerName.includes('wedding')) return 'images/wedding/img4.jpeg';
             if (lowerName.includes('birthday')) return 'images/birthday/img28.jpeg';
@@ -43,7 +48,7 @@ async function fetchServices() {
         }
 
         grid.innerHTML = services.map(service => {
-            const imgSrc = getServiceImage(service.name, service.category);
+            const imgSrc = getServiceImage(service);
             return `
             <div class="service-card">
                 <div class="service-img-container">

@@ -27,8 +27,9 @@
 
 .logo-img {
     height: 60px;
-    width: auto;
-    border-radius: 8px; 
+    width: 60px;
+    border-radius: 50%; 
+    object-fit: cover;
 }
 
 .nav-links {
@@ -231,6 +232,7 @@
 
     .logo-img {
         height: 45px;
+        width: 45px;
     }
 
     .logo-text {
