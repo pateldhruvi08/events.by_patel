@@ -1,4 +1,6 @@
+# pyrefly: ignore [missing-import]
 from sqlalchemy import create_engine
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import sessionmaker
 from backend.app.database import Base
 from backend.app.models import User
@@ -6,7 +8,15 @@ from backend.app.utils import get_password_hash
 from backend.app.config import get_settings
 
 settings = get_settings()
-engine = create_engine(settings.DATABASE_URL)
+db_url = settings.DATABASE_URL
+if db_url and db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+connect_args = {}
+if db_url and "render.com" in db_url:
+    connect_args["sslmode"] = "require"
+
+engine = create_engine(db_url, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 db = SessionLocal()
 
