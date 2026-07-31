@@ -2,26 +2,22 @@
 from sqlalchemy import create_engine
 # pyrefly: ignore [missing-import]
 from sqlalchemy.ext.declarative import declarative_base
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import sessionmaker
+# pyrefly: ignore [missing-import]
 from dotenv import load_dotenv
 import os
 
 # Load .env
 load_dotenv()
 
-from .config import get_settings
-
-settings = get_settings()
-DATABASE_URL = settings.DATABASE_URL
+# Get DATABASE_URL from environment
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Create database engine
-# connect_args is needed for sqlite to allow multiple threads
-connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
-
 engine = create_engine(
     DATABASE_URL,
-    pool_pre_ping=True,
-    connect_args=connect_args
+    pool_pre_ping=True
 )
 
 # Session

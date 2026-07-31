@@ -87,12 +87,8 @@ from datetime import datetime
 # Current file: backend/app/routers/admin.py
 # Standard base: backend/
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-UPLOAD_DIR = "/tmp" if os.environ.get("VERCEL") else os.path.join(BASE_DIR, "static", "uploads")
-try:
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
-except Exception:
-    pass
-
+UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/upload")
 async def upload_image(file: UploadFile = File(...), current_user: models.User = Depends(get_current_admin_user)):

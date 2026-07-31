@@ -1,4 +1,6 @@
+# pyrefly: ignore [missing-import]
 from fastapi import APIRouter, Depends, HTTPException, status
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 from typing import List
 from .. import database, models, schemas
@@ -10,7 +12,7 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=List[schemas.GalleryOut])
-def get_gallery_items(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
+def get_gallery_items(skip: int = 0, limit: int = 1000, db: Session = Depends(database.get_db)):
     items = db.query(models.Gallery).offset(skip).limit(limit).all()
     return items
 

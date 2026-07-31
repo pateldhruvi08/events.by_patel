@@ -70,7 +70,7 @@ class ServiceBase(BaseModel):
     description: Optional[str] = None
     price: float
     image_url: Optional[str] = None
-    category: str
+    category: Optional[str] = "General"
 
 class ServiceCreate(ServiceBase):
     pass
