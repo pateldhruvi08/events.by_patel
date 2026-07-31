@@ -48,7 +48,6 @@ app.include_router(likes.router, prefix="/api")
 @app.get("/api/")
 def read_root():
     return {"message": "Welcome to Event Management System API"}
-@app.on_event("startup")
 def populate_default_services():
     from .database import SessionLocal
     from . import models
@@ -108,6 +107,9 @@ def populate_default_services():
         print(f"Auto-populate error: {e}")
     finally:
         db.close()
+
+# Call it synchronously on startup
+populate_default_services()
 
 @app.get("/api/status")
 def get_status():

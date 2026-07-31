@@ -1,5 +1,6 @@
 # pyrefly: ignore [missing-import]
 from sqlalchemy import create_engine
+# pyrefly: ignore [missing-import]
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
@@ -8,13 +9,10 @@ import os
 # Load .env
 load_dotenv()
 
-# Get DATABASE_URL from environment
-DATABASE_URL = os.getenv("DATABASE_URL")
-if not DATABASE_URL:
-    if os.environ.get("VERCEL"):
-        DATABASE_URL = "sqlite:////tmp/event_management.db"
-    else:
-        DATABASE_URL = "sqlite:///./event_management.db"
+from .config import get_settings
+
+settings = get_settings()
+DATABASE_URL = settings.DATABASE_URL
 
 # Create database engine
 # connect_args is needed for sqlite to allow multiple threads

@@ -7,8 +7,8 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     
-    # Strictly database URL from environment
-    DATABASE_URL: str
+    # Strictly database URL from environment (fallback provided in init)
+    DATABASE_URL: str | None = None
 
     # Security
     SECRET_KEY: str = "your-super-secret-key"
@@ -28,11 +28,15 @@ class Settings(BaseSettings):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        import os
+        if not self.DATABASE_URL:
+            if os.environ.get("VERCEL"):
+                self.DATABASE_URL = "sqlite:////tmp/event_management.db"
+            else:
+                self.DATABASE_URL = "sqlite:///./event_management.db"
+                
         if self.DATABASE_URL and self.DATABASE_URL.startswith("postgres://"):
             self.DATABASE_URL = self.DATABASE_URL.replace("postgres://", "postgresql://", 1)
-        
-        if not self.DATABASE_URL:
-            raise ValueError("DATABASE_URL must be set in the environment variables.")
 
 @lru_cache()
 def get_settings():
