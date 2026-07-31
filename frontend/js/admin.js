@@ -95,6 +95,9 @@ async function fetchServices() {
         function getServiceImage(name, category, providedUrl) {
             if (providedUrl && (providedUrl.startsWith('images/') || providedUrl.startsWith('static/'))) return providedUrl.startsWith('static/') ? API_URL + '/' + providedUrl : '../' + providedUrl;
             const lowerName = (name + ' ' + (category || '')).toLowerCase();
+            if (lowerName.includes('kanku')) return '../images/kanku pagla/img06.jpeg';
+            if (lowerName.includes('eng') || lowerName.includes('engagement')) return '../images/wedding/img4.jpeg';
+            if (lowerName.includes('chhatthi') || lowerName.includes('chatthi')) return '../images/chhatthi pooja/img3.jpeg';
             if (lowerName.includes('wedding')) return '../images/wedding/img4.jpeg';
             if (lowerName.includes('birthday')) return '../images/birthday/img28.jpeg';
             if (lowerName.includes('corporate')) return '../images/corporate/img35.jpeg';
@@ -261,7 +264,6 @@ function setupModals() {
     document.getElementById('service-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const name = document.getElementById('service-name').value;
-        const category = document.getElementById('service-category').value;
         const price = document.getElementById('service-price').value;
         const desc = document.getElementById('service-desc').value;
         const urlInput = document.getElementById('service-image-url');
@@ -274,7 +276,7 @@ function setupModals() {
         }
 
         try {
-            const data = { name, category, price: parseFloat(price), description: desc, image_url: imageUrl };
+            const data = { name, price: parseFloat(price), description: desc, image_url: imageUrl };
             await Api.post('/services/', data, true);
 
             closeServiceModal();

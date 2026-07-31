@@ -38,6 +38,9 @@ async function fetchServices() {
             const name = service.name || '';
             const category = service.category || '';
             const lowerName = (name + ' ' + category).toLowerCase();
+            if (lowerName.includes('kanku')) return 'images/kanku pagla/img06.jpeg';
+            if (lowerName.includes('eng') || lowerName.includes('engagement')) return 'images/wedding/img4.jpeg';
+            if (lowerName.includes('chhatthi') || lowerName.includes('chatthi')) return 'images/chhatthi pooja/img3.jpeg';
             if (lowerName.includes('wedding')) return 'images/wedding/img4.jpeg';
             if (lowerName.includes('birthday')) return 'images/birthday/img28.jpeg';
             if (lowerName.includes('corporate')) return 'images/corporate/img35.jpeg';

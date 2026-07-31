@@ -4,10 +4,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const items = await Api.get('/gallery/');
         if (items && items.length > 0) {
-            galleryImages = items.map(item => ({
-                src: item.image_url ? (item.image_url.startsWith('http') ? item.image_url : (item.image_url.startsWith('static/') ? API_URL + '/' + item.image_url : item.image_url)) : '',
-                category: item.title.toLowerCase().replace(' ', '-')
-            }));
+            galleryImages = items.map(item => {
+                let cat = (item.title || '').toLowerCase().replace(/ /g, '-');
+                if (cat.includes('eng')) cat = 'engagement-ceremony';
+                if (cat.includes('chatthi') || cat.includes('chhatthi')) cat = 'chhatthi-pooja';
+                if (cat.includes('kanku')) cat = 'kanku-pagla';
+                if (cat.includes('welcome') || cat.includes('decor')) cat = 'home-decor';
+                return {
+                    src: item.image_url ? (item.image_url.startsWith('http') ? item.image_url : (item.image_url.startsWith('static/') ? API_URL + '/' + item.image_url : item.image_url)) : '',
+                    category: cat
+                };
+            });
         }
     } catch (e) {
         console.error("Failed to fetch gallery images from server", e);
