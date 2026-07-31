@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from . import models
@@ -20,6 +20,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 os.makedirs(STATIC_DIR, exist_ok=True) # Ensure it exists
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+# Mount on /api/static as well for Vercel compatibility
+app.mount("/api/static", StaticFiles(directory=STATIC_DIR), name="api_static")
 
 
 app.add_middleware(
@@ -30,18 +32,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)
-app.include_router(users.router)
-app.include_router(services.router)
-app.include_router(bookings.router)
-app.include_router(admin.router)
-app.include_router(gallery.router)
-app.include_router(contact.router)
-app.include_router(likes.router)
+api_router = APIRouter(prefix="/api")
+api_router.include_router(auth.router)
+api_router.include_router(users.router)
+api_router.include_router(services.router)
+api_router.include_router(bookings.router)
+api_router.include_router(admin.router)
+api_router.include_router(gallery.router)
+api_router.include_router(contact.router)
+api_router.include_router(likes.router)
 
-@app.get("/")
+# Also add the root to /api
+@api_router.get("/")
 def read_root():
     return {"message": "Welcome to Event Management System API"}
+
+app.include_router(api_router)
 
 @app.on_event("startup")
 def populate_default_services():
