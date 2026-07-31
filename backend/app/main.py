@@ -94,6 +94,16 @@ def populate_default_services():
             admin_user.is_superuser = True
             db.commit()
 
+        # Seed gallery
+        try:
+            import sys
+            import os
+            sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            import seed_gallery
+            seed_gallery.seed_gallery()
+        except Exception as e:
+            print(f"Error seeding gallery: {e}")
+
     except Exception as e:
         print(f"Auto-populate error: {e}")
     finally:
