@@ -1,4 +1,6 @@
+# pyrefly: ignore [missing-import]
 from fastapi import FastAPI, APIRouter
+# pyrefly: ignore [missing-import]
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from . import models
@@ -65,7 +67,10 @@ def populate_default_services():
                 models.Service(name="Birthday Decoration", description="Colorful and fun decorations for birthday parties of all ages.", price=800.0, category="Birthday", image_url="images/birthday/img28.jpeg"),
                 models.Service(name="Baby Shower", description="Celebrate the arrival of your little one with themed decorations and games.", price=1200.0, category="Baby Shower", image_url="images/baby-shower/img20.jpeg"),
                 models.Service(name="Anniversary", description="Timeless and romantic decorations for your special milestone.", price=1500.0, category="Anniversary", image_url="images/anniversery/img27.jpeg"),
-                models.Service(name="Home Decor", description="Add festive charm to your home for pujas, festivals, and gatherings.", price=2000.0, category="Home Decor", image_url="images/home-decor-welcome/img78.jpeg")
+                models.Service(name="Home Decor", description="Add festive charm to your home for pujas, festivals, and gatherings.", price=2000.0, category="Home Decor", image_url="images/home-decor-welcome/img78.jpeg"),
+                models.Service(name="Kanku Pagla", description="Traditional Kanku Pagla setup and welcome decoration.", price=1000.0, category="Welcome Home", image_url="images/kanku pagla/img06.jpeg"),
+                models.Service(name="Engagement Ceremony", description="Beautiful engagement setups and ring ceremony decor.", price=3000.0, category="Wedding", image_url="images/engegment ceremony/img1.jpeg"),
+                models.Service(name="Chhatthi Pooja", description="Special Chhatthi Pooja decorations for newborns.", price=900.0, category="Baby Shower", image_url="images/chhatthi pooja/img3.jpeg")
             ]
             db.add_all(default_services)
             db.commit()
