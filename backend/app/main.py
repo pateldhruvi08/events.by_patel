@@ -2,6 +2,7 @@
 from fastapi import FastAPI, APIRouter
 # pyrefly: ignore [missing-import]
 from fastapi.staticfiles import StaticFiles
+# pyrefly: ignore [missing-import]
 from fastapi.middleware.cors import CORSMiddleware
 from . import models
 from .database import engine, Base
