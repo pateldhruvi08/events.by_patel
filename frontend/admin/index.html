@@ -13,7 +13,7 @@
         // Auto-login to bypass login screen
         if (!localStorage.getItem('token') || localStorage.getItem('role') !== 'admin') {
             const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
-            const apiUrl ='https://events-by-patel.onrender.com/api';
+            const apiUrl = isLocalhost ? 'http://localhost:8000/api' : '/api';
             
             fetch(`${apiUrl}/auth/login`, {
                 method: 'POST',

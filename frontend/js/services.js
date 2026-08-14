@@ -94,14 +94,6 @@ function setupModal() {
     bookingForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // 1. Check if user is logged in
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert('Please log in to book a service.');
-            window.location.href = 'login.html';
-            return;
-        }
-
         const submitBtn = bookingForm.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.innerText;
         submitBtn.innerText = 'Processing...';
@@ -121,16 +113,17 @@ function setupModal() {
 
             // Combine date and time for backend datetime
             const eventDateTime = new Date(`${eventDate}T${eventTime || '00:00'}`).toISOString();
+            const combinedRequests = `Customer: ${customerName} (${customerPhone}). Requests: ${specialRequests}`;
 
-            // 2. Store booking in database via API
+            // 2. Store booking in database via API (Public Endpoint)
             await Api.post('/bookings/', {
                 service_id: parseInt(serviceId),
                 event_date: eventDateTime,
                 time: eventTime,
                 location: eventLocation,
                 package: eventPackage,
-                special_requests: specialRequests
-            }, true);
+                special_requests: combinedRequests
+            }, false);
 
             // 3. Construct enriched WhatsApp Message
             let message = `Hello! I would like to book a service with Event's By Patel.\n\n`;

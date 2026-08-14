@@ -1,4 +1,6 @@
+# pyrefly: ignore [missing-import]
 from fastapi import APIRouter, Depends, HTTPException, status
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 from typing import List
 from .. import database, models, schemas
@@ -15,8 +17,8 @@ def get_bookings(skip: int = 0, limit: int = 100, db: Session = Depends(database
     return bookings
 
 @router.post("/", response_model=schemas.BookingOut)
-def create_booking(booking: schemas.BookingCreate, db: Session = Depends(database.get_db), current_user: models.User = Depends(get_current_user)):
-    db_booking = models.Booking(**booking.dict(), user_id=current_user.id)
+def create_booking(booking: schemas.BookingCreate, db: Session = Depends(database.get_db)):
+    db_booking = models.Booking(**booking.dict())
     db.add(db_booking)
     db.commit()
     db.refresh(db_booking)

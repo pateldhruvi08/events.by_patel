@@ -99,7 +99,7 @@ class BookingUpdate(BaseModel):
 
 class BookingOut(BookingBase):
     id: int
-    user_id: int
+    user_id: Optional[int] = None
     status: str
     created_at: datetime
     service: ServiceOut

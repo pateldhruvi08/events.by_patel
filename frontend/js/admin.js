@@ -194,7 +194,7 @@ async function fetchBookings() {
         tbody.innerHTML = bookings.map(b => `
             <tr style="border-bottom:1px solid #eee;">
                 <td style="padding:10px;">${b.id}</td>
-                <td style="padding:10px;">User #${b.user_id}</td>
+                <td style="padding:10px;">${b.user_id ? 'User #' + b.user_id : 'Guest'}</td>
                 <td style="padding:10px;">${b.service ? b.service.name : 'Unknown Service'}</td>
                 <td style="padding:10px;">${new Date(b.event_date).toLocaleDateString()}</td>
                 <td style="padding:10px;">${b.time || '-'}</td>
