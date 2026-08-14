@@ -73,7 +73,7 @@ async function fetchStats() {
         if (stats.recent_uploads.length > 0) {
             recentGrid.innerHTML = stats.recent_uploads.map(img => `
                 <div style="background:#fff; padding:10px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-                    <img src="${img.image_url.startsWith('http') ? img.image_url : (img.image_url.startsWith('static/') ? API_URL + '/' + img.image_url : '../' + img.image_url)}" style="width:100%; height:100px; object-fit:cover; border-radius:4px;">
+                    <img src="${img.image_url.startsWith('http') || img.image_url.startsWith('data:') ? img.image_url : (img.image_url.startsWith('static/') ? API_URL + '/' + img.image_url : '../' + img.image_url)}" style="width:100%; height:100px; object-fit:cover; border-radius:4px;">
                     <p style="font-size:0.8rem; text-align:center; margin:5px 0 0 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${img.title || 'Untitled'}</p>
                 </div>
             `).join('');
@@ -93,7 +93,11 @@ async function fetchServices() {
     try {
         const services = await Api.get('/services/');
         function getServiceImage(name, category, providedUrl) {
-            if (providedUrl && (providedUrl.startsWith('images/') || providedUrl.startsWith('static/'))) return providedUrl.startsWith('static/') ? API_URL + '/' + providedUrl : '../' + providedUrl;
+            if (providedUrl && (providedUrl.startsWith('images/') || providedUrl.startsWith('static/') || providedUrl.startsWith('http') || providedUrl.startsWith('data:'))) {
+                 if (providedUrl.startsWith('static/')) return API_URL + '/' + providedUrl;
+                 if (providedUrl.startsWith('http') || providedUrl.startsWith('data:')) return providedUrl;
+                 return '../' + providedUrl;
+            }
             const lowerName = (name + ' ' + (category || '')).toLowerCase();
             if (lowerName.includes('kanku')) return '../images/kanku pagla/img06.jpeg';
             if (lowerName.includes('eng') || lowerName.includes('engagement')) return '../images/wedding/img4.jpeg';
@@ -147,7 +151,7 @@ async function fetchGallery() {
             return;
         }
         grid.innerHTML = items.map(item => {
-            const displayUrl = item.image_url.startsWith('http') ? item.image_url : (item.image_url.startsWith('static/') ? API_URL + '/' + item.image_url : '../' + item.image_url);
+            const displayUrl = item.image_url.startsWith('http') || item.image_url.startsWith('data:') ? item.image_url : (item.image_url.startsWith('static/') ? API_URL + '/' + item.image_url : '../' + item.image_url);
             return `
             <div class="admin-card" style="position:relative; display:flex; flex-direction:column; background:#fff; border:1px solid #ddd; border-radius:8px; overflow:hidden;">
                 <img src="${displayUrl}" style="width:100%; height:150px; object-fit:cover; border-bottom:1px solid #eee;">
@@ -243,7 +247,7 @@ window.editGalleryItem = function(id, title, imageUrl) {
     
     const previewContainer = document.getElementById('gallery-preview-container');
     const previewImg = document.getElementById('gallery-preview');
-    previewImg.src = imageUrl.startsWith('http') ? imageUrl : (imageUrl.startsWith('static/') ? API_URL + '/' + imageUrl : '../' + imageUrl);
+    previewImg.src = imageUrl.startsWith('http') || imageUrl.startsWith('data:') ? imageUrl : (imageUrl.startsWith('static/') ? API_URL + '/' + imageUrl : '../' + imageUrl);
     previewContainer.style.display = 'block';
     
     document.getElementById('gallery-modal').style.display = 'block';
@@ -322,8 +326,9 @@ function setupModals() {
                 imageUrl = await uploadImage(file);
                 // Strip the starting slash if present to make it relative (or keep it depending on frontend config)
                 // Actually the API returns /static/uploads/..., let's store it as is, or strip slash.
-                // Our frontend expects paths relative to root or full urls. The API returns /static/uploads/...
-                if (imageUrl.startsWith('/')) {
+                // Actually the API now returns Base64 data:image/... URIs which we can store exactly as is!
+                // Let's strip only if it's an old-style /static/ path
+                if (imageUrl.startsWith('/') && !imageUrl.startsWith('data:')) {
                     imageUrl = imageUrl.substring(1); // 'static/uploads/...'
                 }
             } else if (!imageUrl) {

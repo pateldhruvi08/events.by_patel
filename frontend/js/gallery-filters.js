@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (cat.includes('kanku')) cat = 'kanku-pagla';
                 if (cat.includes('welcome') || cat.includes('decor')) cat = 'home-decor';
                 return {
-                    src: item.image_url ? (item.image_url.startsWith('http') ? item.image_url : (item.image_url.startsWith('static/') ? API_URL + '/' + item.image_url : item.image_url)) : '',
+                    src: item.image_url ? (item.image_url.startsWith('http') || item.image_url.startsWith('data:') ? item.image_url : (item.image_url.startsWith('static/') ? API_URL + '/' + item.image_url : item.image_url)) : '',
                     category: cat
                 };
             });

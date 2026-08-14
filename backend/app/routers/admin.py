@@ -90,21 +90,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+import base64
+
 @router.post("/upload")
 async def upload_image(file: UploadFile = File(...), current_user: models.User = Depends(get_current_admin_user)):
     try:
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-        # Sanitize filename
-        safe_filename = "".join([c for c in file.filename if c.isalnum() or c in ('.', '_', '-')])
-        filename = f"{timestamp}_{safe_filename}"
-        filepath = os.path.join(UPLOAD_DIR, filename)
-        
-        with open(filepath, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-            
-        # URL construction (Hardcoded localhost for now, ideally strictly relative or config driven)
-        url = f"/static/uploads/{filename}"
-        return {"url": url}
+        contents = await file.read()
+        encoded = base64.b64encode(contents).decode("utf-8")
+        content_type = file.content_type or "image/jpeg"
+        data_uri = f"data:{content_type};base64,{encoded}"
+        return {"url": data_uri}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
