@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.classList.remove('liked');
             icon.classList.remove('fas');
             icon.classList.add('far');
-            
+
             // If we are currently in the 'liked' tab, hide the image immediately
             const activeBtn = document.querySelector('.gallery-filter-btn.active');
             if (activeBtn && activeBtn.getAttribute('data-filter') === 'liked') {

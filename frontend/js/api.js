@@ -1,7 +1,7 @@
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
 // On Vercel, requests to /api are proxied to the backend. Locally, we point to the backend server running on port 8000.
 // If you use `vercel dev` locally, you can just use '/api' for both, but we keep this fallback for simple local servers.
-const API_URL = isLocalhost ? 'http://localhost:8000/api' : '/api';
+const API_URL = isLocalhost ? 'http://127.0.0.1:8000/api' : '/api';
 
 class Api {
     static async handleAuthError(response) {
@@ -163,11 +163,11 @@ function initSaveContactModal() {
     openBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            
+
             // Pre-fill if user has saved data previously
             const savedName = localStorage.getItem('savedContactName');
-            if(savedName) nameInput.value = savedName;
-            
+            if (savedName) nameInput.value = savedName;
+
             modal.style.display = 'flex';
             setTimeout(() => nameInput.focus(), 100);
         });
@@ -200,7 +200,7 @@ function initSaveContactModal() {
         const encodedText = encodeURIComponent(text);
 
         const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedText}`;
-        
+
         // Open WhatsApp in a new tab
         window.open(whatsappUrl, '_blank');
 
@@ -218,7 +218,7 @@ function initializeApp() {
 function initMobileMenu() {
     const mobileMenuBtn = document.getElementById('mobile-menu');
     const navLinks = document.querySelector('.nav-links');
-    
+
     if (mobileMenuBtn && navLinks) {
         mobileMenuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');

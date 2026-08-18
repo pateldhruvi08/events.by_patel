@@ -21,7 +21,8 @@ if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
 connect_args = {}
 # Render PostgreSQL requires SSL for external connections or sometimes internal
 if DATABASE_URL and "render.com" in DATABASE_URL:
-    connect_args["sslmode"] = "require"
+    # connect_args["sslmode"] = "require"
+    pass
 
 # Create database engine
 engine = create_engine(
