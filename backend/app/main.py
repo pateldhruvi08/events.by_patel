@@ -10,9 +10,6 @@ from . import models
 from .database import engine, Base, get_db
 from .routers import auth, users, services, bookings, admin, gallery, contact, likes
 import os
-import threading
-import time
-import urllib.request
 
 # 1. Safely create any missing tables using SQLAlchemy models.
 # 2. WILL NOT drop existing tables or delete existing data (CREATE TABLE IF NOT EXISTS).
@@ -55,10 +52,6 @@ api_router.include_router(likes.router)
 def read_root():
     return {"message": "Welcome to Event Management System API"}
 
-@api_router.get("/keep-alive")
-def keep_alive(db: Session = Depends(get_db)):
-    db.execute(text("SELECT 1"))
-    return {"status": "alive, database awake"}
 
 app.include_router(api_router)
 
@@ -116,22 +109,6 @@ def populate_default_services():
     finally:
         db.close()
 
-def ping_server():
-    while True:
-        try:
-            time.sleep(600) # 10 minutes
-            url = os.getenv("RENDER_EXTERNAL_URL", "http://localhost:8000")
-            if url:
-                ping_url = f"{url.rstrip('/')}/api/keep-alive"
-                print(f"Pinging {ping_url} to keep server awake...")
-                urllib.request.urlopen(ping_url)
-        except Exception as e:
-            print(f"Keep-alive ping failed: {e}")
-
-@app.on_event("startup")
-def start_keep_alive():
-    thread = threading.Thread(target=ping_server, daemon=True)
-    thread.start()
 
 @app.get("/status")
 def get_status():
